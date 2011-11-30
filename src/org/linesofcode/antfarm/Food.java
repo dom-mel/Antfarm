@@ -12,10 +12,10 @@ public class Food {
 
     private PVector position;
 
-    private final PApplet applet;
+    private final PApplet antFarm;
 
-    public Food(PApplet applet) {
-        this.applet = applet;
+    public Food(PApplet antFarm) {
+        this.antFarm = antFarm;
     }
 
     public void update(float delta) {

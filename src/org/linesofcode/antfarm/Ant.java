@@ -12,10 +12,10 @@ public class Ant {
     private PVector position;
     private PVector viewDirection;
 
-    private final PApplet applet;
+    private final PApplet antFarm;
 
-    public Ant(PApplet applet) {
-        this.applet = applet;
+    public Ant(PApplet antFarm) {
+        this.antFarm = antFarm;
     }
 
     public void update(float delta) {

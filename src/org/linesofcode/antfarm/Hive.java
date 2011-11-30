@@ -9,10 +9,10 @@ public class Hive {
 
     private PVector position;
 
-    private final PApplet applet;
+    private final PApplet antFarm;
 
-    public Hive(PApplet applet) {
-        this.applet = applet;
+    public Hive(PApplet antFarm) {
+        this.antFarm = antFarm;
     }
 
     public void update(float delta) {
