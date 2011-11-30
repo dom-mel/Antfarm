@@ -12,9 +12,9 @@ public class Food {
 
     private PVector position;
 
-    private final PApplet antFarm;
+    private final AntFarm antFarm;
 
-    public Food(PApplet antFarm) {
+    public Food(AntFarm antFarm) {
         this.antFarm = antFarm;
     }
 
@@ -22,7 +22,7 @@ public class Food {
 
     }
 
-    public void draw(PApplet applet) {
+    public void draw() {
 
     }
 

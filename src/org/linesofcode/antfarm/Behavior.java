@@ -2,5 +2,5 @@ package org.linesofcode.antfarm;
 
 public interface Behavior {
 
-    public void update(float delta);
+    public void update(float delta, Ant ant);
 }
