@@ -14,18 +14,13 @@ public class AntFarm extends PApplet {
 
 	private static final long serialVersionUID = -8658351784308310939L;
 	
-	private Set<Hive> hives;
-    private Set<Ant> ants;
-    private Set<Food> foods;
+	private Set<Hive> hives = new HashSet<Hive>();
+    private Set<Ant> ants = new HashSet<Ant>();
+    private Set<Food> foods = new HashSet<Food>();
 
     @Override
     public void setup() {
         size(600, 400);
-
-        hives = new HashSet<Hive>();
-        ants = new HashSet<Ant>();
-        foods = new HashSet<Food>();
-
         hives.add(new Hive(this, Color.BLUE.getRGB()));
     }
 
@@ -51,13 +46,8 @@ public class AntFarm extends PApplet {
         for (Hive hive : hives) {
             hive.update(delta);
         }
-
         for (Ant ant : ants) {
             ant.update(delta);
-        }
-
-        for (Food food : foods) {
-            food.update(delta);
         }
     }
 

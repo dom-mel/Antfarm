@@ -12,7 +12,7 @@ public class Ant {
 
     private Behavior currentBehavior;
     private boolean carriesFood;
-    private int age;
+    private long timeOfBirth;
 
     private PVector position;
     private PVector viewDirection;
@@ -22,11 +22,12 @@ public class Ant {
 
     private int speedMultiplier = 1;
 
-    public Ant(AntFarm antFarm, Hive hive) {
+    public Ant(AntFarm antFarm, Hive hive, long timeOfBirth) {
         this.antFarm = antFarm;
         this.hive = hive;
         calcSpawnPosition();
-        currentBehavior = new DummyBehavior();
+        currentBehavior = new DummyBehavior(this); // FIXME Debug code
+        this.timeOfBirth = timeOfBirth;
     }
 
     private void calcSpawnPosition() {
@@ -39,7 +40,7 @@ public class Ant {
     }
 
     public void update(float delta) {
-        currentBehavior.update(delta, this);
+        currentBehavior.update(delta);
     }
 
     public void draw() {
@@ -49,44 +50,52 @@ public class Ant {
         antFarm.rect(position.x, position.y, SIZE, SIZE);
     }
 
-    private void pickupFood(Food food) {
-
+    public void pickupFood(Food food) {
+    	food.pickUp();
+    	carriesFood = true;
     }
 
-    private void deliverFood(Hive hive) {
-
+    public void enterHive() {
+    	hive.pickUpAnt();
+    	if(carriesFood) {
+	    	hive.putFood();
+	    	carriesFood = false;
+    	}
+    	idle();
     }
 
-    private void move(PVector velocity) {
-
+    public void move(PVector velocity) {
+    	// TODO überarbeiten? die ameise hat ja schon eine blickrichtung. eigentlich muss sie nur x einheiten
+    	// in blickrichtung laufen. zu kompliziert?
+    	position.add(velocity);
     }
 
-    private void turn(float degrees) {
-
+    public void turn(float degrees) {
+    	// TODO rotate view direction by degrees
     }
 
-    private void wander() {
-
+    public void wander() {
+    	// TODO switch to wander behavior
     }
 
-    private void returnFood() {
-
+    public void returnFood() {
+    	// TODO switch to return food behavior
     }
 
-    private void giveUp() {
-
+    public void giveUp() {
+    	// TODO switch to give up behavior
     }
 
-    private void idle() {
-
+    public void idle() {
+    	// TODO switch to idle behavior
     }
 
-    private void followPheromoneTrail() {
-
+    public void followPheromoneTrail() {
+    	// TODO switch to follow trail behavior
     }
 
-    private void die() {
-
+    public void die() {
+    	antFarm.removeAnt(this);
     }
 
     public AntFarm getAntFarm() {
@@ -100,5 +109,17 @@ public class Ant {
     public int getSpeedMultiplier() {
         return speedMultiplier;
     }
+
+	public PVector getViewDirection() {
+		return viewDirection;
+	}
+
+	public void setViewDirection(PVector viewDirection) {
+		this.viewDirection = viewDirection;
+	}
+
+	public long getTimeOfBirth() {
+		return timeOfBirth;
+	}
 
 }
