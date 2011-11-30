@@ -1,4 +1,6 @@
-package org.linesofcode.antfarm;
+package org.linesofcode.antfarm.entities;
+
+import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PApplet;
 import processing.core.PVector;

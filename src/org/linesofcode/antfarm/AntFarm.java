@@ -6,9 +6,15 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.linesofcode.antfarm.entities.Ant;
+import org.linesofcode.antfarm.entities.Food;
+import org.linesofcode.antfarm.entities.Hive;
+
 public class AntFarm extends PApplet {
 
-    private Set<Hive> hives;
+	private static final long serialVersionUID = -8658351784308310939L;
+	
+	private Set<Hive> hives;
     private Set<Ant> ants;
     private Set<Food> foods;
 
