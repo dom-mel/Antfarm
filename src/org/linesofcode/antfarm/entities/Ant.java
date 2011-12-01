@@ -13,6 +13,7 @@ public class Ant {
     private Behavior currentBehavior;
     private boolean carriesFood;
     private long timeOfBirth;
+    private int speedMultiplier = 1;
 
     private PVector position;
     private PVector viewDirection;
@@ -20,23 +21,13 @@ public class Ant {
     private final AntFarm antFarm;
     private final Hive hive;
 
-    private int speedMultiplier = 1;
-
-    public Ant(AntFarm antFarm, Hive hive, long timeOfBirth) {
+    public Ant(AntFarm antFarm, Hive hive, PVector position, PVector viewDirection) {
         this.antFarm = antFarm;
         this.hive = hive;
-        calcSpawnPosition();
+        this.position = position;
+        this.viewDirection = viewDirection;
         currentBehavior = new DummyBehavior(this); // FIXME Debug code
-        this.timeOfBirth = timeOfBirth;
-    }
-
-    private void calcSpawnPosition() {
-        position = hive.getCenter();
-        float dx = ((antFarm.random(-1, 1) < 0)?-1:1 ) * antFarm.random(3, 10);
-        float dy = ((antFarm.random(-1, 1) < 0)?-1:1 ) * antFarm.random(3, 10);
-        position.add(dx, dy, 0);
-
-        viewDirection = PVector.add(hive.getCenter(), PVector.mult(position, -1));
+        timeOfBirth = System.currentTimeMillis();
     }
 
     public void update(float delta) {
@@ -65,7 +56,7 @@ public class Ant {
     }
 
     public void move(PVector velocity) {
-    	// TODO überarbeiten? die ameise hat ja schon eine blickrichtung. eigentlich muss sie nur x einheiten
+    	// TODO ï¿½berarbeiten? die ameise hat ja schon eine blickrichtung. eigentlich muss sie nur x einheiten
     	// in blickrichtung laufen. zu kompliziert?
     	position.add(velocity);
     }

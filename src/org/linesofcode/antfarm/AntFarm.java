@@ -9,6 +9,7 @@ import java.util.Set;
 import org.linesofcode.antfarm.entities.Ant;
 import org.linesofcode.antfarm.entities.Food;
 import org.linesofcode.antfarm.entities.Hive;
+import processing.core.PVector;
 
 public class AntFarm extends PApplet {
 
@@ -51,8 +52,14 @@ public class AntFarm extends PApplet {
         }
     }
 
-    public void addAnt(Ant ant) {
-        ants.add(ant);
+    public void spawnAnt(Hive hive) {
+        PVector position = hive.getCenter();
+        float dx = ((random(-1, 1) < 0)?-1:1 ) * random(3, 10);
+        float dy = ((random(-1, 1) < 0)?-1:1 ) * random(3, 10);
+        position.add(dx, dy, 0);
+
+        PVector viewDirection = PVector.add(hive.getCenter(), PVector.mult(position, -1));
+        ants.add(new Ant(this, hive, position, viewDirection));
     }
 
     public void removeAnt(Ant ant) {

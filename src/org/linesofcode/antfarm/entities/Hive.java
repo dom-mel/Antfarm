@@ -31,7 +31,7 @@ public class Hive {
     public void update(float delta) {
         lastSpawn += delta;
         if (lastSpawn > spawnSpeed) {
-            spawnAnt();
+            antFarm.spawnAnt(this);
             lastSpawn = 0;
         }
 
@@ -41,10 +41,6 @@ public class Hive {
         antFarm.stroke(outlineColor);
         antFarm.fill(color);
         antFarm.rect(position.x, position.y, SIZE, SIZE);
-    }
-
-    public void spawnAnt() {
-        antFarm.addAnt(new Ant(antFarm, this, 0)); // FIXME date of birth param is just dummy
     }
 
     public int getColor() {

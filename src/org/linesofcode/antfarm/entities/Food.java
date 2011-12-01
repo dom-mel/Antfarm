@@ -8,7 +8,6 @@ import processing.core.PVector;
 
 public class Food {
 	
-	// TODO use dependency injection
 	private static final int MAX_COUNT = 1000;
 	private static final int SIZE = 10; 
 
