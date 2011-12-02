@@ -43,7 +43,7 @@ public class AntFarm extends PApplet {
         }
     }
 
-    public void update(float delta) {
+    private void update(float delta) {
         for (Hive hive : hives) {
             hive.update(delta);
         }
