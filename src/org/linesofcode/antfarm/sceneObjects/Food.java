@@ -1,4 +1,4 @@
-package org.linesofcode.antfarm.entities;
+package org.linesofcode.antfarm.sceneObjects;
 
 import java.awt.Color;
 

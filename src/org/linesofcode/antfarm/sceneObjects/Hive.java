@@ -1,4 +1,4 @@
-package org.linesofcode.antfarm.entities;
+package org.linesofcode.antfarm.sceneObjects;
 
 import org.linesofcode.antfarm.AntFarm;
 

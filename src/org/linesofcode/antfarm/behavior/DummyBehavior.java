@@ -1,6 +1,6 @@
 package org.linesofcode.antfarm.behavior;
 
-import org.linesofcode.antfarm.entities.Ant;
+import org.linesofcode.antfarm.sceneObjects.Ant;
 
 import processing.core.PVector;
 

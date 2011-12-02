@@ -6,9 +6,9 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.linesofcode.antfarm.entities.Ant;
-import org.linesofcode.antfarm.entities.Food;
-import org.linesofcode.antfarm.entities.Hive;
+import org.linesofcode.antfarm.sceneObjects.Ant;
+import org.linesofcode.antfarm.sceneObjects.Food;
+import org.linesofcode.antfarm.sceneObjects.Hive;
 import processing.core.PVector;
 
 public class AntFarm extends PApplet {
