@@ -1,28 +1,39 @@
 package org.linesofcode.antfarm;
 
+import controlP5.Slider;
+import org.linesofcode.antfarm.sceneObjects.*;
 import processing.core.PApplet;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.linesofcode.antfarm.sceneObjects.Ant;
-import org.linesofcode.antfarm.sceneObjects.Food;
-import org.linesofcode.antfarm.sceneObjects.Hive;
 import processing.core.PVector;
 
 public class AntFarm extends PApplet {
 
 	private static final long serialVersionUID = -8658351784308310939L;
 	
-	private Set<Hive> hives = new HashSet<Hive>();
-    private Set<Ant> ants = new HashSet<Ant>();
-    private Set<Food> foods = new HashSet<Food>();
+	private Set<SceneObject> sceneObjects = new HashSet<SceneObject>();
+
+    private Overlay overlay;
+
+    private int antCounter;
+    private int hiveCounter;
+    private int foodCounter;
+
+    private Slider speed;
 
     @Override
     public void setup() {
         size(600, 400);
-        hives.add(new Hive(this, Color.BLUE.getRGB()));
+        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
+        overlay = new Overlay(this);
+
+        antCounter = 0;
+        hiveCounter = 0;
+        foodCounter = 0;
+        speed = addSlider("speed", 0, 10, 2);
     }
 
     @Override
@@ -30,26 +41,18 @@ public class AntFarm extends PApplet {
         background(Color.LIGHT_GRAY.getRGB());
 
         update(1 / frameRate);
-        for (Hive hive : hives) {
-            hive.draw();
+        for (SceneObject object : sceneObjects) {
+            object.draw();
         }
-
-        for (Ant ant : ants) {
-            ant.draw();
-        }
-
-        for (Food food : foods) {
-            food.draw();
-        }
+        overlay.draw();
     }
 
     private void update(float delta) {
-        for (Hive hive : hives) {
-            hive.update(delta);
+        for (SceneObject object : sceneObjects) {
+            object.update(delta);
         }
-        for (Ant ant : ants) {
-            ant.update(delta);
-        }
+        overlay.update(delta);
+        println(speed.value());
     }
 
     public void spawnAnt(Hive hive) {
@@ -59,22 +62,32 @@ public class AntFarm extends PApplet {
         position.add(dx, dy, 0);
 
         PVector viewDirection = PVector.add(hive.getCenter(), PVector.mult(position, -1));
-        ants.add(new Ant(this, hive, position, viewDirection));
+        sceneObjects.add(new Ant(this, hive, position, viewDirection));
+        antCounter++;
     }
 
     public void removeAnt(Ant ant) {
-        ants.remove(ant);
+        sceneObjects.remove(ant);
+        antCounter--;
     }
 
     public void addFood(Food food) {
-        foods.add(food);
+        sceneObjects.add(food);
+        foodCounter++;
     }
 
     public void removeFood(Food food) {
-        foods.remove(food);
+        sceneObjects.remove(food);
+        foodCounter--;
     }
 
     public void removeHive(Hive hive) {
-        hives.remove(hive);
+        sceneObjects.remove(hive);
+        hiveCounter--;
+        // TODO let ants die
+    }
+
+    public Slider addSlider(String name, float min, float max, float defaultValue) {
+        return overlay.addSlider(name, min, max, defaultValue);
     }
 }

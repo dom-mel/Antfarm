@@ -6,7 +6,7 @@ import org.linesofcode.antfarm.behavior.DummyBehavior;
 
 import processing.core.PVector;
 
-public class Ant {
+public class Ant implements SceneObject {
 
     private final static float SIZE = 2;
 
