@@ -14,25 +14,20 @@ public class AntFarm extends PApplet {
 
 	private static final long serialVersionUID = -8658351784308310939L;
 	
-	private Set<SceneObject> sceneObjects = new HashSet<SceneObject>();
+	private Set<Hive> hives = new HashSet<Hive>();
+    private Set<Food> foods = new HashSet<Food>();
+    private Set<Ant> ants = new HashSet<Ant>();
 
     private Overlay overlay;
-
-    private int antCounter;
-    private int hiveCounter;
-    private int foodCounter;
 
     private Slider speed;
 
     @Override
     public void setup() {
         size(600, 400);
-        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
+        hives.add(new Hive(this, Color.BLUE.getRGB()));
         overlay = new Overlay(this);
 
-        antCounter = 0;
-        hiveCounter = 0;
-        foodCounter = 0;
         speed = addSlider("speed", 0, 10, 2);
     }
 
@@ -41,16 +36,26 @@ public class AntFarm extends PApplet {
         background(Color.LIGHT_GRAY.getRGB());
 
         update(1 / frameRate);
-        for (SceneObject object : sceneObjects) {
-            object.draw();
+        for (Hive hive : hives) {
+            hive.draw();
+        }
+        for (Food food : foods) {
+            food.draw();
+        }
+        for (Ant ant : ants) {
+            ant.draw();
         }
         overlay.draw();
     }
 
     private void update(float delta) {
-        for (SceneObject object : sceneObjects) {
-            object.update(delta);
+        for (Hive hive : hives) {
+            hive.update(delta);
         }
+        for (Ant ant : ants) {
+            ant.update(delta);
+        }
+
         overlay.update(delta);
         println(speed.value());
     }
@@ -62,28 +67,23 @@ public class AntFarm extends PApplet {
         position.add(dx, dy, 0);
 
         PVector viewDirection = PVector.add(hive.getCenter(), PVector.mult(position, -1));
-        sceneObjects.add(new Ant(this, hive, position, viewDirection));
-        antCounter++;
+        ants.add(new Ant(this, hive, position, viewDirection));
     }
 
     public void removeAnt(Ant ant) {
-        sceneObjects.remove(ant);
-        antCounter--;
+        ants.remove(ant);
     }
 
     public void addFood(Food food) {
-        sceneObjects.add(food);
-        foodCounter++;
+        foods.add(food);
     }
 
     public void removeFood(Food food) {
-        sceneObjects.remove(food);
-        foodCounter--;
+        foods.remove(food);
     }
 
     public void removeHive(Hive hive) {
-        sceneObjects.remove(hive);
-        hiveCounter--;
+        hives.remove(hive);
         // TODO let ants die
     }
 
