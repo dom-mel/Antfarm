@@ -1,4 +1,4 @@
-package org.linesofcode.antfarm.entities;
+package org.linesofcode.antfarm.sceneObjects;
 
 import java.awt.Color;
 
@@ -6,7 +6,7 @@ import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
 
-public class Food {
+public class Food implements SceneObject {
 	
 	private static final int MAX_COUNT = 1000;
 	private static final int SIZE = 10; 
@@ -30,6 +30,10 @@ public class Food {
         // make the size of the food source shrink while it depletes
         float relativeSize = ((count * 100) / MAX_COUNT) * SIZE;
         antFarm.rect(position.x, position.y, relativeSize, relativeSize);
+    }
+
+    @Override
+    public void update(float delta) {
     }
 
     public void pickUp() {

@@ -1,10 +1,10 @@
-package org.linesofcode.antfarm.entities;
+package org.linesofcode.antfarm.sceneObjects;
 
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
 
-public class Hive {
+public class Hive implements SceneObject {
 
     public final static float SIZE = 10;
 

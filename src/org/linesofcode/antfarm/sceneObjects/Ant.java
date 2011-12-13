@@ -1,4 +1,4 @@
-package org.linesofcode.antfarm.entities;
+package org.linesofcode.antfarm.sceneObjects;
 
 import org.linesofcode.antfarm.AntFarm;
 import org.linesofcode.antfarm.behavior.Behavior;
@@ -6,7 +6,7 @@ import org.linesofcode.antfarm.behavior.DummyBehavior;
 
 import processing.core.PVector;
 
-public class Ant {
+public class Ant implements SceneObject {
 
     private final static float SIZE = 2;
 

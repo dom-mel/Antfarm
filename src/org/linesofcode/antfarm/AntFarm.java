@@ -1,14 +1,13 @@
 package org.linesofcode.antfarm;
 
+import controlP5.Slider;
+import org.linesofcode.antfarm.sceneObjects.*;
 import processing.core.PApplet;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.linesofcode.antfarm.entities.Ant;
-import org.linesofcode.antfarm.entities.Food;
-import org.linesofcode.antfarm.entities.Hive;
 import processing.core.PVector;
 
 public class AntFarm extends PApplet {
@@ -16,13 +15,20 @@ public class AntFarm extends PApplet {
 	private static final long serialVersionUID = -8658351784308310939L;
 	
 	private Set<Hive> hives = new HashSet<Hive>();
-    private Set<Ant> ants = new HashSet<Ant>();
     private Set<Food> foods = new HashSet<Food>();
+    private Set<Ant> ants = new HashSet<Ant>();
+
+    private Overlay overlay;
+
+    private Slider speed;
 
     @Override
     public void setup() {
         size(600, 400);
         hives.add(new Hive(this, Color.BLUE.getRGB()));
+        overlay = new Overlay(this);
+
+        speed = addSlider("speed", 0, 10, 2);
     }
 
     @Override
@@ -33,14 +39,13 @@ public class AntFarm extends PApplet {
         for (Hive hive : hives) {
             hive.draw();
         }
-
-        for (Ant ant : ants) {
-            ant.draw();
-        }
-
         for (Food food : foods) {
             food.draw();
         }
+        for (Ant ant : ants) {
+            ant.draw();
+        }
+        overlay.draw();
     }
 
     private void update(float delta) {
@@ -50,6 +55,9 @@ public class AntFarm extends PApplet {
         for (Ant ant : ants) {
             ant.update(delta);
         }
+
+        overlay.update(delta);
+        println(speed.value());
     }
 
     public void spawnAnt(Hive hive) {
@@ -76,5 +84,10 @@ public class AntFarm extends PApplet {
 
     public void removeHive(Hive hive) {
         hives.remove(hive);
+        // TODO let ants die
+    }
+
+    public Slider addSlider(String name, float min, float max, float defaultValue) {
+        return overlay.addSlider(name, min, max, defaultValue);
     }
 }
