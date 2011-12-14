@@ -50,6 +50,9 @@ public class AntFarm extends PApplet {
         addObjects.clear();
 
         for (SceneObject sceneObject: sceneObjects) {
+            if (removeObjects.contains(sceneObject)) {
+                continue;
+            }
             sceneObject.update(delta);
         }
 
