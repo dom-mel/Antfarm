@@ -13,9 +13,9 @@ import processing.core.PVector;
 @SuppressWarnings("serial")
 public class AntFarm extends PApplet {
 
-	private Set<Hive> hives = new HashSet<Hive>();
-    private Set<Food> foods = new HashSet<Food>();
-    private Set<Ant> ants = new HashSet<Ant>();
+    private Set<SceneObject> sceneObjects = new HashSet<SceneObject>();
+    private Set<SceneObject> removeObjects = new HashSet<SceneObject>();
+    private Set<SceneObject> addObjects = new HashSet<SceneObject>();
 
     private Overlay overlay;
 
@@ -26,7 +26,9 @@ public class AntFarm extends PApplet {
     @Override
     public void setup() {
         size(600, 400);
-        hives.add(new Hive(this, Color.BLUE.getRGB()));
+        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
+        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
+        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
         overlay = new Overlay(this);
 
         speed = addSlider("speed", 0, 10, 2);
@@ -37,47 +39,44 @@ public class AntFarm extends PApplet {
         background(Color.LIGHT_GRAY.getRGB());
 
         update(1 / frameRate);
-        for (Hive hive : hives) {
-            hive.draw();
-        }
-        for (Food food : foods) {
-            food.draw();
-        }
-        for (Ant ant : ants) {
-            ant.draw();
+        for (SceneObject sceneObject: sceneObjects) {
+            sceneObject.draw();
         }
         overlay.draw();
     }
 
     private void update(float delta) {
-        for (Hive hive : hives) {
-            hive.update(delta);
+        removeObjects.clear();
+        addObjects.clear();
+
+        for (SceneObject sceneObject: sceneObjects) {
+            sceneObject.update(delta);
         }
-        for (Ant ant : ants) {
-            ant.update(delta);
-        }
+
+        sceneObjects.removeAll(removeObjects);
+        sceneObjects.addAll(addObjects);
 
         overlay.update(delta);
     }
 
     public void spawnAnt(Hive hive) {
-    	ants.add(new Ant(this, hive));
+    	addObjects.add(new Ant(this, hive));
     }
 
     public void removeAnt(Ant ant) {
-        //ants.remove(ant);
+        removeObjects.add(ant);
     }
 
     public void addFood(Food food) {
-        foods.add(food);
+        addObjects.add(food);
     }
 
     public void removeFood(Food food) {
-        foods.remove(food);
+        removeObjects.add(food);
     }
 
     public void removeHive(Hive hive) {
-        hives.remove(hive);
+        sceneObjects.remove(hive);
         // TODO let ants die
     }
 
