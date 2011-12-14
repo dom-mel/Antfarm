@@ -10,10 +10,9 @@ import java.util.Set;
 
 import processing.core.PVector;
 
+@SuppressWarnings("serial")
 public class AntFarm extends PApplet {
 
-	private static final long serialVersionUID = -8658351784308310939L;
-	
 	private Set<Hive> hives = new HashSet<Hive>();
     private Set<Food> foods = new HashSet<Food>();
     private Set<Ant> ants = new HashSet<Ant>();
@@ -21,6 +20,8 @@ public class AntFarm extends PApplet {
     private Overlay overlay;
 
     private Slider speed;
+
+	private boolean drawViewDirection = true;
 
     @Override
     public void setup() {
@@ -57,21 +58,14 @@ public class AntFarm extends PApplet {
         }
 
         overlay.update(delta);
-        println(speed.value());
     }
 
     public void spawnAnt(Hive hive) {
-        PVector position = hive.getCenter();
-        float dx = ((random(-1, 1) < 0)?-1:1 ) * random(3, 10);
-        float dy = ((random(-1, 1) < 0)?-1:1 ) * random(3, 10);
-        position.add(dx, dy, 0);
-
-        PVector viewDirection = PVector.add(hive.getCenter(), PVector.mult(position, -1));
-        ants.add(new Ant(this, hive, position, viewDirection));
+    	ants.add(new Ant(this, hive));
     }
 
     public void removeAnt(Ant ant) {
-        ants.remove(ant);
+        //ants.remove(ant);
     }
 
     public void addFood(Food food) {
@@ -90,4 +84,8 @@ public class AntFarm extends PApplet {
     public Slider addSlider(String name, float min, float max, float defaultValue) {
         return overlay.addSlider(name, min, max, defaultValue);
     }
+
+	public boolean isDrawViewDirection() {
+		return drawViewDirection;
+	}
 }

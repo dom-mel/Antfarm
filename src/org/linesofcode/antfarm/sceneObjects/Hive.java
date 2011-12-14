@@ -58,4 +58,12 @@ public class Hive implements SceneObject {
     public void pickUpAnt() {
     	ants++;
     }
+
+	public PVector getSpawnPosition() {
+		PVector pos = getCenter();
+        float dx = ((antFarm.random(-1, 1) < 0) ? -1 : 1 ) * antFarm.random(3, 10);
+        float dy = ((antFarm.random(-1, 1) < 0) ? -1 : 1 ) * antFarm.random(3, 10);
+        pos.add(dx, dy, 0);
+		return pos;
+	}
 }
