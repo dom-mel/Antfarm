@@ -87,7 +87,7 @@ public class Ant implements SceneObject {
         
     	//turn(behavior.getSteeringForce(), delta);
         //steer(new PVector(1,1), delta);
-        turn(delta);
+        //turn(delta);
         computeViewDirection();
         move(delta);
     }
@@ -116,7 +116,6 @@ public class Ant implements SceneObject {
     		return;
     	}
     	float radius = rotationDelta / (TURN_RATE * delta);
-    	System.out.println(AntFarm.degrees(TURN_RATE * delta));
     	rotation += radius;
 //    	rotationDelta -= radius;
 	}
