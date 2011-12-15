@@ -87,7 +87,7 @@ public class AntFarm extends PApplet {
         return overlay.addSlider(name, min, max, defaultValue);
     }
 
-	public boolean isDrawViewDirection() {
+	public boolean isDrawViewDirectionEnabled() {
 		return drawViewDirection;
 	}
 }

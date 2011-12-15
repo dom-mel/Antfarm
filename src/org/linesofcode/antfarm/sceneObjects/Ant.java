@@ -20,14 +20,16 @@ public class Ant implements SceneObject {
     private static final float MIN_TIME_TO_LIVE = 25f;
     private static final float MAX_TIME_TO_LIVE = 40f;
     private static final float MOVEMENT_RATE = 30f;
-    private static final float TURN_RATE = 90f;
+    private static final float TURN_RATE = AntFarm.radians(45f);
 
     private final AntFarm antFarm;
     private final Hive hive;
     private PVector position;
-    private PVector viewDirection;
+    private PVector viewDirection = new PVector(0f, 0f);
     private boolean visible = false;
     private int color;
+    private float rotation = 0f;
+    private float rotationDelta;
     
     private AntState state;
     private boolean carriesFood;
@@ -43,6 +45,7 @@ public class Ant implements SceneObject {
         timeToLive = antFarm.random(25f, 40f);
         speedMultiplier = antFarm.random(0.75f, 1.25f);
         enterHive();
+        rotationDelta = AntFarm.radians(180f);
     }
 
     public void update(float delta) {
@@ -83,13 +86,21 @@ public class Ant implements SceneObject {
         }
         
     	//turn(behavior.getSteeringForce(), delta);
-        steer(new PVector(1,1), delta);
+        //steer(new PVector(1,1), delta);
+        turn(delta);
+        computeViewDirection();
         move(delta);
     }
     
-    private void steer(PVector steeringDirection, float delta) {
+    private void computeViewDirection() {
+		viewDirection.x = AntFarm.sin(rotation);
+		viewDirection.y = -AntFarm.cos(rotation);
+		viewDirection.normalize();
+	}
+
+	private void steer(PVector steeringDirection, float delta) {
     	PVector direction = PVector.add(viewDirection, steeringDirection);
-		setViewDirection(direction);
+//		setViewDirection(direction);
 	}
 
     private void move(float delta) {
@@ -98,31 +109,44 @@ public class Ant implements SceneObject {
     	position.add(velocity);
     }
     
+    // TODO lieber force?
+ // note: all angles should be radians. please ensure, if changing...
+	private void turn(float delta) {
+    	if(rotationDelta == 0) {
+    		return;
+    	}
+    	float radius = rotationDelta / (TURN_RATE * delta);
+    	System.out.println(AntFarm.degrees(TURN_RATE * delta));
+    	rotation += radius;
+//    	rotationDelta -= radius;
+	}
+    
 	public void draw() {
+		
     	if(!visible) {
     		return;
     	}
-    	if(antFarm.isDrawViewDirection()) {
-    		drawViewDirection();
+    	
+    	antFarm.translate(position.x, position.y);
+        antFarm.rotate(rotation);
+        
+        if(antFarm.isDrawViewDirectionEnabled()) {
+        	antFarm.stroke(Color.RED.getRGB());
+        	antFarm.line(0, 0, 0, -4f * SIZE);
     	}
+        
         antFarm.stroke(color);
         antFarm.fill(color);
-        antFarm.rect(position.x, position.y, SIZE, SIZE);
+        
+        antFarm.beginShape();
+        antFarm.vertex(-SIZE, SIZE);
+        antFarm.vertex(0, -SIZE);
+        antFarm.vertex(SIZE, SIZE);
+        antFarm.endShape();
+        
+        antFarm.rotate(-rotation);
+        antFarm.translate(-position.x, -position.y);
     }
-
-	private void drawViewDirection() {
-		antFarm.stroke(Color.RED.getRGB());
-    	PVector direction = PVector.add(position, PVector.mult(viewDirection, 10f));
-        antFarm.line(position.x, position.y, direction.x, direction.y);
-	}
-
-	@Deprecated
-    private void turn(PVector force, float delta) {
-    	float adjustedRate = TURN_RATE * delta;
-    	float angle = PVector.angleBetween(viewDirection, force) / adjustedRate;
-    	System.out.println(angle);
-		viewDirection.rotate(AntFarm.radians(angle));
-	}
 
 	private void putTrail() {
 		// TODO put a trail
@@ -146,8 +170,12 @@ public class Ant implements SceneObject {
     
     private void leaveHive() {
     	position = hive.getSpawnPosition();
-    	setViewDirection(PVector.add(hive.getCenter(), PVector.mult(position, -1)));
     	visible = true;
+    	PVector distance = PVector.sub(position, hive.getCenter());
+    	float dot = hive.getCenter().x * distance.x + hive.getCenter().y * distance.y;
+    	float magHive = (float)Math.sqrt(hive.getCenter().x * hive.getCenter().x + hive.getCenter().y * hive.getCenter().y);
+    	float magPosition = (float)Math.sqrt(distance.x * distance.x + distance.y * distance.y);
+    	rotation = (float)Math.acos(dot / (magHive * magPosition));
     	wander();
     }
 
@@ -174,7 +202,6 @@ public class Ant implements SceneObject {
     private void die() {
     	visible = false;
     	antFarm.removeAnt(this);
-    	System.out.println("Argh!!");
     }
 
     public AntFarm getAntFarm() {
@@ -188,9 +215,8 @@ public class Ant implements SceneObject {
 	public PVector getViewDirection() {
 		return viewDirection;
 	}
-
-	public void setViewDirection(PVector viewDirection) {
-		this.viewDirection = viewDirection;
-		this.viewDirection.normalize();
-	}
+	
+//	private void setRotation(float degrees) {
+//		rotation = AntFarm.radians(degrees);
+//	}
 }
