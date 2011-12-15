@@ -7,6 +7,7 @@ import processing.core.PVector;
 public class Hive implements SceneObject {
 
     public final static float SIZE = 10;
+    public final static float BORDER_DISTANCE = 10;
 
     private long foodCount;
     private float spawnSpeed = 5;
@@ -23,8 +24,8 @@ public class Hive implements SceneObject {
         this.antFarm = antFarm;
         this.color = color;
         position = new PVector();
-        position.x = antFarm.random(0, antFarm.width);
-        position.y = antFarm.random(0, antFarm.height);
+        position.x = antFarm.random(BORDER_DISTANCE, antFarm.width - SIZE - BORDER_DISTANCE);
+        position.y = antFarm.random(BORDER_DISTANCE, antFarm.height - SIZE - BORDER_DISTANCE);
         lastSpawn = Float.MAX_VALUE;
     }
 
