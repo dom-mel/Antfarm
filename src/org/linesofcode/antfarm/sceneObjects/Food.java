@@ -2,10 +2,12 @@ package org.linesofcode.antfarm.sceneObjects;
 
 import java.awt.Color;
 
+import com.google.gag.annotation.disclaimer.AnimalsHarmedDuringTheMaking;
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
 
+@AnimalsHarmedDuringTheMaking(animal = "Ants", number = Integer.MAX_VALUE)
 public class Food implements SceneObject {
 	
 	private static final int MAX_COUNT = 1000;
@@ -17,27 +19,31 @@ public class Food implements SceneObject {
 
     private final AntFarm antFarm;
 
-	private int outlineColor = Color.BLACK.getRGB();
-	private int color = Color.GREEN.getRGB();
+	private final int outlineColor = Color.BLACK.getRGB();
+	private final int color = Color.GREEN.getRGB();
 
-    public Food(AntFarm antFarm) {
+    public Food(final AntFarm antFarm) {
         this.antFarm = antFarm;
+        count = (int) antFarm.random(MAX_COUNT * 0.90f, MAX_COUNT);
     }
 
     public void draw() {
     	antFarm.stroke(outlineColor);
         antFarm.fill(color);
         // make the size of the food source shrink while it depletes
-        float relativeSize = ((count * 100) / MAX_COUNT) * SIZE;
+        final float relativeSize = ((count * 100) / MAX_COUNT) * SIZE;
         antFarm.rect(position.x, position.y, relativeSize, relativeSize);
     }
 
     @Override
-    public void update(float delta) {
+    public void update(final float delta) {
     }
 
     public void pickUp() {
         count--;
+        if (count == 0) {
+            deplete();
+        }
     }
 
     public void deplete() {

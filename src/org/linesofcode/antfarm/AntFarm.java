@@ -42,7 +42,6 @@ public class AntFarm extends PApplet {
             staticSceneObjects.add(new Hive(this, HIVE_COLOR));
         }
         overlay = new Overlay(this);
-
         speed = addSlider("speed", 0, 10, 2);
     }
 
@@ -109,12 +108,13 @@ public class AntFarm extends PApplet {
         removeObjects.add(ant);
     }
 
-    public void addFood(final Food food) {
-        addObjects.add(food);
+    private void spawnFood() {
+        addObjects.add(new Food(this));
     }
 
     public void removeFood(final Food food) {
         removeObjects.add(food);
+        spawnFood(); // spawn new one - i'm hungry
     }
 
     public void removeHive(final Hive hive) {
