@@ -1,5 +1,6 @@
 package org.linesofcode.antfarm.sceneObjects;
 
+import com.google.gag.annotation.remark.Facepalm;
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
@@ -7,8 +8,8 @@ import processing.core.PVector;
 public class Hive implements SceneObject {
 
     public final static float SIZE = 10;
-    public final static float BORDER_DISTANCE = 10;
     private static final float SPAWN_NOISE = 0.5f;
+    public final static float BORDER_SPANW_DISTANCE = 10;
 
     private long foodCount;
     private float spawnSpeed = 5;
@@ -25,9 +26,7 @@ public class Hive implements SceneObject {
     public Hive(final AntFarm antFarm, final int color) {
         this.antFarm = antFarm;
         this.color = color;
-        position = new PVector();
-        position.x = antFarm.random(BORDER_DISTANCE, antFarm.width - SIZE - BORDER_DISTANCE);
-        position.y = antFarm.random(BORDER_DISTANCE, antFarm.height - SIZE - BORDER_DISTANCE);
+        position = calcStaticSpawnPosition();
         lastSpawn = Float.MAX_VALUE;
     }
 
@@ -63,10 +62,30 @@ public class Hive implements SceneObject {
     }
 
 	public PVector getSpawnPosition() {
-		PVector pos = getCenter();
-        float dx = ((antFarm.random(-1, 1) < 0) ? -1 : 1 ) * antFarm.random(3, 10);
-        float dy = ((antFarm.random(-1, 1) < 0) ? -1 : 1 ) * antFarm.random(3, 10);
+		final PVector pos = getCenter();
+        final float dx = ((antFarm.random(-1, 1) < 0) ? -1 : 1 ) * antFarm.random(3, 10);
+        final float dy = ((antFarm.random(-1, 1) < 0) ? -1 : 1 ) * antFarm.random(3, 10);
         pos.add(dx, dy, 0);
-		return pos;
-	}
+        return pos;
+    }
+
+    @Facepalm
+    public PVector calcStaticSpawnPosition() {
+        final PVector position = new PVector();
+        while (true) {
+            position.x = antFarm.random(BORDER_SPANW_DISTANCE, antFarm.width - SIZE - BORDER_SPANW_DISTANCE);
+            position.y = antFarm.random(BORDER_SPANW_DISTANCE, antFarm.height - SIZE - BORDER_SPANW_DISTANCE);
+            boolean correct = true;
+            for (final Hive object: antFarm.getHives()) {
+                if (Math.abs(PVector.dist(position, object.position)) < AntFarm.MIN_STATIC_SPAWN_DISTANCE) {
+                    correct = false;
+                    break;
+                }
+            }
+            if (correct) {
+                break;
+            }
+        }
+        return position;
+    }
 }

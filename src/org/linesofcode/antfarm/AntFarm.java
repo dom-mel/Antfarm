@@ -11,8 +11,19 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class AntFarm extends PApplet {
 
+    private static final int[] HIVE_COLORS = {
+            Color.BLUE.getRGB(),
+            Color.RED.getRGB(),
+            Color.YELLOW.getRGB(),
+            Color.PINK.getRGB(),
+            Color.MAGENTA.getRGB(),
+            Color.ORANGE.getRGB(),
+            Color.WHITE.getRGB()
+    };
+    public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
+
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
-    private Set<Ant> ants = new HashSet<Ant>(1000);
+    private final Set<Ant> ants = new HashSet<Ant>(1000);
 
     private final Set<SceneObject> removeObjects = new HashSet<SceneObject>();
     private final Set<SceneObject> addObjects = new HashSet<SceneObject>();
@@ -26,12 +37,10 @@ public class AntFarm extends PApplet {
     @Override
     public void setup() {
         size(600, 400);
-        staticSceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
-        staticSceneObjects.add(new Hive(this, Color.RED.getRGB()));
-        staticSceneObjects.add(new Hive(this, Color.YELLOW.getRGB()));
-        staticSceneObjects.add(new Hive(this, Color.GREEN.getRGB()));
-        staticSceneObjects.add(new Hive(this, Color.PINK.getRGB()));
-        staticSceneObjects.add(new Hive(this, Color.BLACK.getRGB()));
+
+        for (final int HIVE_COLOR : HIVE_COLORS) {
+            staticSceneObjects.add(new Hive(this, HIVE_COLOR));
+        }
         overlay = new Overlay(this);
 
         speed = addSlider("speed", 0, 10, 2);
@@ -120,4 +129,14 @@ public class AntFarm extends PApplet {
 	public boolean isDrawViewDirectionEnabled() {
 		return drawViewDirection;
 	}
+
+    public Set<Hive> getHives() {
+        final Set<Hive> hives = new HashSet<Hive>();
+        for (final SceneObject object: staticSceneObjects) {
+            if (object instanceof Hive) {
+                hives.add((Hive) object);
+            }
+        }
+        return hives;
+    }
 }
