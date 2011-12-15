@@ -143,4 +143,27 @@ public class AntFarm extends PApplet {
         }
         return hives;
     }
+
+    public SceneObject getIntersect(final SceneObject me) {
+        final SceneObject staticIntersect = getIntersectWithStatic(me);
+        if (staticIntersect != null) {
+            return staticIntersect;
+        }
+
+        for (final SceneObject another: ants) {
+            if (another.getBoundingBox().intersects(me.getBoundingBox())) {
+                return another;
+            }
+        }
+        return null;
+    }
+
+    public SceneObject getIntersectWithStatic(final SceneObject me) {
+        for (final SceneObject another: staticSceneObjects) {
+            if (another.getBoundingBox().intersects(me.getBoundingBox())) {
+                return another;
+            }
+        }
+        return null;
+    }
 }
