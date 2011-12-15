@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Dominik Eckelmann
  */
-public class Overlay implements SceneObject {
+public class Overlay {
 
     private static final float OVERLAY_KEY_BLOCK = 0.2f;
     private static final char OVERLAY_KEY = 'o';
@@ -43,7 +43,6 @@ public class Overlay implements SceneObject {
         return slider;
     }
 
-    @Override
     public void draw() {
         if (!visible) {
             return;
@@ -55,7 +54,6 @@ public class Overlay implements SceneObject {
 
     }
 
-    @Override
     public void update(final float delta) {
         block += delta;
         if (block > OVERLAY_KEY_BLOCK && antFarm.keyPressed) {

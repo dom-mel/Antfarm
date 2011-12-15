@@ -22,11 +22,13 @@ public class Hive implements SceneObject {
     private float lastSpawn;
 
     private final AntFarm antFarm;
+    private final BoundingBox bounds;
 
     public Hive(final AntFarm antFarm, final int color) {
         this.antFarm = antFarm;
         this.color = color;
         position = calcStaticSpawnPosition();
+        bounds = new BoundingBox(position, SIZE, SIZE);
         lastSpawn = Float.MAX_VALUE;
     }
 
@@ -88,4 +90,10 @@ public class Hive implements SceneObject {
         }
         return position;
     }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        return bounds;
+    }
+
 }

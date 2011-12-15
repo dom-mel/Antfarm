@@ -37,6 +37,7 @@ public class Ant implements SceneObject {
     private float speedMultiplier;
     private float idleTime;
     SteeringBehavior behavior;
+    private BoundingBox bounds;
 
     public Ant(AntFarm antFarm, Hive hive) {
         this.antFarm = antFarm;
@@ -91,7 +92,7 @@ public class Ant implements SceneObject {
         computeViewDirection();
         move(delta);
     }
-    
+
     private void computeViewDirection() {
 		viewDirection.x = AntFarm.sin(rotation);
 		viewDirection.y = -AntFarm.cos(rotation);
@@ -164,11 +165,13 @@ public class Ant implements SceneObject {
 	    	carriesFood = false;
     	}
     	visible = false;
+        bounds = null;
     	idle();
     }
     
     private void leaveHive() {
     	position = hive.getSpawnPosition();
+        bounds = new BoundingBox(position, SIZE, SIZE);
     	visible = true;
     	PVector distance = PVector.sub(position, hive.getCenter());
     	float dot = hive.getCenter().x * distance.x + hive.getCenter().y * distance.y;
@@ -218,4 +221,11 @@ public class Ant implements SceneObject {
     public Hive getHive() {
         return hive;
     }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        return bounds;
+    }
+
+
 }
