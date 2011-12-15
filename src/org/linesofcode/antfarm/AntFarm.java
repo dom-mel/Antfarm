@@ -4,7 +4,7 @@ import controlP5.Slider;
 import org.linesofcode.antfarm.sceneObjects.*;
 import processing.core.PApplet;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -118,8 +118,12 @@ public class AntFarm extends PApplet {
     }
 
     public void removeHive(final Hive hive) {
+        for (final Ant ant: ants) {
+            if (ant.getHive() == hive) {
+                removeAnt(ant);
+            }
+        }
         removeObjects.remove(hive);
-        // TODO let ants die
     }
 
     public Slider addSlider(final String name, final float min, final float max, final float defaultValue) {

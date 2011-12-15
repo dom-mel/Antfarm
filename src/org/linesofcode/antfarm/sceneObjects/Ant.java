@@ -214,8 +214,8 @@ public class Ant implements SceneObject {
 	public PVector getViewDirection() {
 		return viewDirection;
 	}
-	
-//	private void setRotation(float degrees) {
-//		rotation = AntFarm.radians(degrees);
-//	}
+
+    public Hive getHive() {
+        return hive;
+    }
 }
