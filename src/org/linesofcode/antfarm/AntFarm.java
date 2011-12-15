@@ -11,11 +11,11 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class AntFarm extends PApplet {
 
-    private Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
+    private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private Set<Ant> ants = new HashSet<Ant>(1000);
 
-    private Set<SceneObject> removeObjects = new HashSet<SceneObject>();
-    private Set<SceneObject> addObjects = new HashSet<SceneObject>();
+    private final Set<SceneObject> removeObjects = new HashSet<SceneObject>();
+    private final Set<SceneObject> addObjects = new HashSet<SceneObject>();
 
     private Overlay overlay;
 
@@ -44,25 +44,25 @@ public class AntFarm extends PApplet {
         update(1 / frameRate);
         performChanges();
 
-        for (SceneObject sceneObject: staticSceneObjects) {
+        for (final SceneObject sceneObject: staticSceneObjects) {
             sceneObject.draw();
         }
-        for (SceneObject sceneObject: ants) {
+        for (final SceneObject sceneObject: ants) {
             sceneObject.draw();
         }
         overlay.draw();
     }
 
-    private void update(float delta) {
+    private void update(final float delta) {
 
-        for (SceneObject sceneObject: staticSceneObjects) {
+        for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
                 continue;
             }
             sceneObject.update(delta);
         }
 
-        for (SceneObject sceneObject: ants) {
+        for (final SceneObject sceneObject: ants) {
             if (removeObjects.contains(sceneObject)) {
                 continue;
             }
@@ -73,7 +73,7 @@ public class AntFarm extends PApplet {
     }
 
     private void performChanges() {
-        for (SceneObject sceneObject: removeObjects) {
+        for (final SceneObject sceneObject: removeObjects) {
             if (sceneObject instanceof Ant) {
                 ants.remove(sceneObject);
             } else {
@@ -81,7 +81,7 @@ public class AntFarm extends PApplet {
             }
         }
 
-        for (SceneObject sceneObject: addObjects) {
+        for (final SceneObject sceneObject: addObjects) {
             if (sceneObject instanceof Ant) {
                 ants.add((Ant) sceneObject);
             } else {
@@ -92,28 +92,28 @@ public class AntFarm extends PApplet {
         addObjects.clear();
     }
 
-    public void spawnAnt(Hive hive) {
+    public void spawnAnt(final Hive hive) {
     	addObjects.add(new Ant(this, hive));
     }
 
-    public void removeAnt(Ant ant) {
+    public void removeAnt(final Ant ant) {
         removeObjects.add(ant);
     }
 
-    public void addFood(Food food) {
+    public void addFood(final Food food) {
         addObjects.add(food);
     }
 
-    public void removeFood(Food food) {
+    public void removeFood(final Food food) {
         removeObjects.add(food);
     }
 
-    public void removeHive(Hive hive) {
+    public void removeHive(final Hive hive) {
         removeObjects.remove(hive);
         // TODO let ants die
     }
 
-    public Slider addSlider(String name, float min, float max, float defaultValue) {
+    public Slider addSlider(final String name, final float min, final float max, final float defaultValue) {
         return overlay.addSlider(name, min, max, defaultValue);
     }
 
