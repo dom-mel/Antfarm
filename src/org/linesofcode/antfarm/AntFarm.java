@@ -8,12 +8,12 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import processing.core.PVector;
-
 @SuppressWarnings("serial")
 public class AntFarm extends PApplet {
 
-    private Set<SceneObject> sceneObjects = new HashSet<SceneObject>();
+    private Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
+    private Set<Ant> ants = new HashSet<Ant>(1000);
+
     private Set<SceneObject> removeObjects = new HashSet<SceneObject>();
     private Set<SceneObject> addObjects = new HashSet<SceneObject>();
 
@@ -26,12 +26,12 @@ public class AntFarm extends PApplet {
     @Override
     public void setup() {
         size(600, 400);
-        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
-        sceneObjects.add(new Hive(this, Color.RED.getRGB()));
-        sceneObjects.add(new Hive(this, Color.YELLOW.getRGB()));
-        sceneObjects.add(new Hive(this, Color.GREEN.getRGB()));
-        sceneObjects.add(new Hive(this, Color.PINK.getRGB()));
-        sceneObjects.add(new Hive(this, Color.BLACK.getRGB()));
+        staticSceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
+        staticSceneObjects.add(new Hive(this, Color.RED.getRGB()));
+        staticSceneObjects.add(new Hive(this, Color.YELLOW.getRGB()));
+        staticSceneObjects.add(new Hive(this, Color.GREEN.getRGB()));
+        staticSceneObjects.add(new Hive(this, Color.PINK.getRGB()));
+        staticSceneObjects.add(new Hive(this, Color.BLACK.getRGB()));
         overlay = new Overlay(this);
 
         speed = addSlider("speed", 0, 10, 2);
@@ -42,27 +42,54 @@ public class AntFarm extends PApplet {
         background(Color.LIGHT_GRAY.getRGB());
 
         update(1 / frameRate);
-        for (SceneObject sceneObject: sceneObjects) {
+        performChanges();
+
+        for (SceneObject sceneObject: staticSceneObjects) {
+            sceneObject.draw();
+        }
+        for (SceneObject sceneObject: ants) {
             sceneObject.draw();
         }
         overlay.draw();
     }
 
     private void update(float delta) {
-        removeObjects.clear();
-        addObjects.clear();
 
-        for (SceneObject sceneObject: sceneObjects) {
+        for (SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
                 continue;
             }
             sceneObject.update(delta);
         }
 
-        sceneObjects.removeAll(removeObjects);
-        sceneObjects.addAll(addObjects);
+        for (SceneObject sceneObject: ants) {
+            if (removeObjects.contains(sceneObject)) {
+                continue;
+            }
+            sceneObject.update(delta);
+        }
 
         overlay.update(delta);
+    }
+
+    private void performChanges() {
+        for (SceneObject sceneObject: removeObjects) {
+            if (sceneObject instanceof Ant) {
+                ants.remove(sceneObject);
+            } else {
+                staticSceneObjects.remove(sceneObject);
+            }
+        }
+
+        for (SceneObject sceneObject: addObjects) {
+            if (sceneObject instanceof Ant) {
+                ants.add((Ant) sceneObject);
+            } else {
+                staticSceneObjects.add(sceneObject);
+            }
+        }
+        removeObjects.clear();
+        addObjects.clear();
     }
 
     public void spawnAnt(Hive hive) {
@@ -82,7 +109,7 @@ public class AntFarm extends PApplet {
     }
 
     public void removeHive(Hive hive) {
-        sceneObjects.remove(hive);
+        removeObjects.remove(hive);
         // TODO let ants die
     }
 
