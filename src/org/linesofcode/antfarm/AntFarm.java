@@ -27,8 +27,11 @@ public class AntFarm extends PApplet {
     public void setup() {
         size(600, 400);
         sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
-        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
-        sceneObjects.add(new Hive(this, Color.BLUE.getRGB()));
+        sceneObjects.add(new Hive(this, Color.RED.getRGB()));
+        sceneObjects.add(new Hive(this, Color.YELLOW.getRGB()));
+        sceneObjects.add(new Hive(this, Color.GREEN.getRGB()));
+        sceneObjects.add(new Hive(this, Color.PINK.getRGB()));
+        sceneObjects.add(new Hive(this, Color.BLACK.getRGB()));
         overlay = new Overlay(this);
 
         speed = addSlider("speed", 0, 10, 2);
