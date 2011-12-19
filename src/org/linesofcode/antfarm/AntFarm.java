@@ -50,13 +50,13 @@ public class AntFarm extends PApplet {
         background(Color.LIGHT_GRAY.getRGB());
 
         update(1 / frameRate);
-        performChanges();
+        addAndRemoveSceneObjects();
 
         for (final SceneObject sceneObject: staticSceneObjects) {
             sceneObject.draw();
         }
-        for (final SceneObject sceneObject: ants) {
-            sceneObject.draw();
+        for (final Ant ant: ants) {
+            ant.draw();
         }
         overlay.draw();
     }
@@ -70,17 +70,17 @@ public class AntFarm extends PApplet {
             sceneObject.update(delta);
         }
 
-        for (final SceneObject sceneObject: ants) {
-            if (removeObjects.contains(sceneObject)) {
+        for (final Ant ant: ants) {
+            if (removeObjects.contains(ant)) {
                 continue;
             }
-            sceneObject.update(delta);
+            ant.update(delta);
         }
 
         overlay.update(delta);
     }
 
-    private void performChanges() {
+    private void addAndRemoveSceneObjects() {
         for (final SceneObject sceneObject: removeObjects) {
             if (sceneObject instanceof Ant) {
                 ants.remove(sceneObject);
@@ -114,7 +114,7 @@ public class AntFarm extends PApplet {
 
     public void removeFood(final Food food) {
         removeObjects.add(food);
-        spawnFood(); // spawn new one - i'm hungry
+        spawnFood();
     }
 
     public void removeHive(final Hive hive) {
