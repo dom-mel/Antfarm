@@ -1,6 +1,6 @@
 package org.linesofcode.antfarm.sceneObjects;
 
-import com.google.gag.annotation.remark.Facepalm;
+//import com.google.gag.annotation.remark.Facepalm;
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
@@ -71,7 +71,7 @@ public class Hive implements SceneObject {
         return pos;
     }
 
-    @Facepalm
+//    @Facepalm
     public PVector calcStaticSpawnPosition() {
         final PVector position = new PVector();
         while (true) {
