@@ -17,7 +17,7 @@ public class AntFarm extends PApplet {
             Color.YELLOW.getRGB(),
             Color.PINK.getRGB(),
             Color.MAGENTA.getRGB(),
-            Color.ORANGE.getRGB(),
+            new Color(148, 56, 161).getRGB(),
             Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;

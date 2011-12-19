@@ -49,6 +49,7 @@ public class Overlay {
         }
 
         antFarm.fill(0, 0, 0, 88);
+        antFarm.stroke(0, 0, 0, 88);
         antFarm.strokeWeight(0);
         antFarm.rect(0, 0, antFarm.width, antFarm.height);
 

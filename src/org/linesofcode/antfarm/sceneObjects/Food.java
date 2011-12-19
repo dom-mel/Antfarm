@@ -2,12 +2,10 @@ package org.linesofcode.antfarm.sceneObjects;
 
 import java.awt.Color;
 
-//import com.google.gag.annotation.disclaimer.AnimalsHarmedDuringTheMaking;
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
 
-//@AnimalsHarmedDuringTheMaking(animal = "Ants", number = Integer.MAX_VALUE)
 public class Food implements SceneObject {
 	
 	private static final int MAX_COUNT = 1000;
