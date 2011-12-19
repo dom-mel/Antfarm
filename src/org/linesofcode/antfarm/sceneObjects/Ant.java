@@ -13,14 +13,16 @@ import processing.core.PVector;
 public class Ant implements SceneObject {
 
 	// TODO read from config
-    private static final float SIZE = 2f;
-    private static final float MAX_IDLE_TIME = 5f;
-    private static final float VIEW_DISTANCE = 30f;
-    private static final float FIELD_OF_VIEW = 120f;
-    private static final float MIN_TIME_TO_LIVE = 80f;
-    private static final float MAX_TIME_TO_LIVE = 120f;
-    private static final float MOVEMENT_RATE = 30f;
-    private static final float TURN_RATE = AntFarm.radians(45f);
+	public static float SIZE = 2f;
+    public static float MAX_IDLE_TIME = 5f;
+    public static float VIEW_DISTANCE = 30f;
+    public static float FIELD_OF_VIEW = 120f;
+    public static float MIN_TIME_TO_LIVE = 120f;
+    public static float MAX_TIME_TO_LIVE = 180f;
+    public static float MOVEMENT_RATE = 30f;
+    public static float TURN_RATE = AntFarm.radians(45f);
+    public static float MIN_WANDERING_TIME = 60f;
+    public static float MAX_WANDERING_TIME = 90f;
 
     private final AntFarm antFarm;
     private final Hive hive;
@@ -36,6 +38,8 @@ public class Ant implements SceneObject {
     private float timeToLive;
     private float speedMultiplier;
     private float idleTime;
+    private float wanderingTime;
+    private float maxWanderingTime;
     SteeringBehavior behavior;
     private BoundingBox bounds;
 
@@ -67,6 +71,10 @@ public class Ant implements SceneObject {
         }
         case WANDERING: {
         	// TODO check food / trail found
+        	wanderingTime += delta;
+        	if(wanderingTime >= maxWanderingTime) {
+        		returnHome();
+        	}
         	break;
         }
         case RETURNING_HOME: {
@@ -165,6 +173,8 @@ public class Ant implements SceneObject {
     	float magHive = (float)Math.sqrt(hive.getCenter().x * hive.getCenter().x + hive.getCenter().y * hive.getCenter().y);
     	float magPosition = (float)Math.sqrt(distance.x * distance.x + distance.y * distance.y);
     	rotation = (float)Math.acos(dot / (magHive * magPosition));
+    	wanderingTime = 0f;
+    	maxWanderingTime = antFarm.random(MIN_WANDERING_TIME, MAX_WANDERING_TIME);
     	wander();
     }
 

@@ -8,6 +8,7 @@ public class SeekBehavior implements SteeringBehavior {
 
 	private PVector target;
 	private Ant ant;
+	private float rotationDelta;
 	
 	public SeekBehavior(PVector target, Ant ant) {
 		this.target = target;
@@ -16,13 +17,12 @@ public class SeekBehavior implements SteeringBehavior {
 	
 	@Override
 	public void update(float delta) {
-		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public float getRotationDelta() {
-		// TODO Auto-generated method stub
-		return 0;
+		return rotationDelta;
 	}
 
 }
