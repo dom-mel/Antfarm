@@ -17,8 +17,8 @@ public class Ant implements SceneObject {
     private static final float MAX_IDLE_TIME = 5f;
     private static final float VIEW_DISTANCE = 30f;
     private static final float FIELD_OF_VIEW = 120f;
-    private static final float MIN_TIME_TO_LIVE = 25f;
-    private static final float MAX_TIME_TO_LIVE = 40f;
+    private static final float MIN_TIME_TO_LIVE = 80f;
+    private static final float MAX_TIME_TO_LIVE = 120f;
     private static final float MOVEMENT_RATE = 30f;
     private static final float TURN_RATE = AntFarm.radians(45f);
 
@@ -86,9 +86,8 @@ public class Ant implements SceneObject {
         }
         }
         
-    	//turn(behavior.getSteeringForce(), delta);
-        //steer(new PVector(1,1), delta);
-        //turn(delta);
+        behavior.update(delta);
+        turn((float)Math.toRadians(behavior.getRotationDelta()));
         computeViewDirection();
         move(delta);
     }
@@ -99,26 +98,14 @@ public class Ant implements SceneObject {
 		viewDirection.normalize();
 	}
 
-	private void steer(PVector steeringDirection, float delta) {
-    	PVector direction = PVector.add(viewDirection, steeringDirection);
-//		setViewDirection(direction);
-	}
-
     private void move(float delta) {
     	PVector velocity = PVector.mult(viewDirection, MOVEMENT_RATE * delta);
     	velocity.mult(speedMultiplier);
     	position.add(velocity);
     }
     
-    // TODO lieber force?
- // note: all angles should be radians. please ensure, if changing...
 	private void turn(float delta) {
-    	if(rotationDelta == 0) {
-    		return;
-    	}
-    	float radius = rotationDelta / (TURN_RATE * delta);
-    	rotation += radius;
-//    	rotationDelta -= radius;
+		rotation += delta;
 	}
     
 	public void draw() {
@@ -188,17 +175,12 @@ public class Ant implements SceneObject {
 
     private void returnHome() {
     	state = AntState.RETURNING_HOME;
-    	behavior = new SeekBehavior(hive.getCenter());
+    	behavior = new SeekBehavior(hive.getCenter(), this);
     }
 
     private void idle() {
     	idleTime = 0;
     	state = AntState.IDLE;
-    }
-
-    private void followPheromoneTrail(PheromoneTrail trail) {
-    	state = AntState.FOLLOWING_TRAIL;
-    	behavior = new PathFollowingBehavior(trail);
     }
 
     private void die() {
@@ -226,6 +208,4 @@ public class Ant implements SceneObject {
     public BoundingBox getBoundingBox() {
         return bounds;
     }
-
-
 }

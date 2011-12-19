@@ -32,7 +32,7 @@ public class AntFarm extends PApplet {
 
     private Slider speed;
 
-	private boolean drawViewDirection = true;
+	private boolean drawViewDirection = false;
 
     @Override
     public void setup() {
