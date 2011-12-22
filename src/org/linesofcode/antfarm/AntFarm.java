@@ -32,8 +32,6 @@ public class AntFarm extends PApplet {
 
     private Overlay overlay;
 
-    private Slider speed;
-
 	private boolean drawViewDirection = false;
 
     @Override
@@ -45,7 +43,6 @@ public class AntFarm extends PApplet {
         }
         spawnFood();
         overlay = new Overlay(this);
-        speed = addSlider("speed", 0, 10, 2);
     }
 
     @Override

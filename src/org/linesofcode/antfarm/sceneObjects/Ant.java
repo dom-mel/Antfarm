@@ -1,5 +1,6 @@
 package org.linesofcode.antfarm.sceneObjects;
 
+import controlP5.Slider;
 import org.linesofcode.antfarm.AntFarm;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
@@ -11,16 +12,16 @@ import java.awt.Color;
 public class Ant implements SceneObject {
 
 	// TODO read from config
-	public static float SIZE = 2f;
-    public static float MAX_IDLE_TIME = 5f;
+	public static Slider SIZE;
+    public static Slider MAX_IDLE_TIME;
     public static float VIEW_DISTANCE = 30f;
     public static float FIELD_OF_VIEW = 120f;
     public static float MIN_TIME_TO_LIVE = 120f;
     public static float MAX_TIME_TO_LIVE = 180f;
-    public static float MOVEMENT_RATE = 30f;
+    public static Slider MOVEMENT_RATE;
     public static float TURN_RATE = AntFarm.radians(45f);
-    public static float MIN_WANDERING_TIME = 60f;
-    public static float MAX_WANDERING_TIME = 90f;
+    public static Slider MIN_WANDERING_TIME;
+    public static Slider MAX_WANDERING_TIME;
 
     private final AntFarm antFarm;
     private final Hive hive;
@@ -43,12 +44,24 @@ public class Ant implements SceneObject {
 
     public Ant(AntFarm antFarm, Hive hive) {
         this.antFarm = antFarm;
+        setupSliders();
         this.hive = hive;
         color = hive.getColor();
         timeToLive = antFarm.random(25f, 40f);
         speedMultiplier = antFarm.random(0.75f, 1.25f);
         enterHive();
         rotationDelta = AntFarm.radians(180f);
+    }
+
+    private void setupSliders() {
+        if (SIZE != null) {
+            return;
+        }
+        SIZE = antFarm.addSlider("Ant size", 2, 20, 2);
+        MAX_IDLE_TIME = antFarm.addSlider("Ant max idle time", 1, 100,  5);
+        MOVEMENT_RATE = antFarm.addSlider("Movement rate", 1,  300,  30);
+        MIN_WANDERING_TIME = antFarm.addSlider("Min wandering time", 0, 80,  60);
+        MAX_WANDERING_TIME = antFarm.addSlider("Max wandering time", 80,  360,  90);
     }
 
     public void update(float delta) {
@@ -62,7 +75,7 @@ public class Ant implements SceneObject {
         switch(state) {
         case IDLE: {
         	idleTime += delta;
-        	if(idleTime >= MAX_IDLE_TIME) {
+        	if(idleTime >= MAX_IDLE_TIME.value()) {
         		leaveHive();
         	}
         	return;
@@ -105,7 +118,7 @@ public class Ant implements SceneObject {
 	}
 
     private void move(float delta) {
-    	PVector velocity = PVector.mult(viewDirection, MOVEMENT_RATE * delta);
+    	PVector velocity = PVector.mult(viewDirection, MOVEMENT_RATE.value() * delta);
     	velocity.mult(speedMultiplier);
     	position.add(velocity);
     }
@@ -120,7 +133,7 @@ public class Ant implements SceneObject {
     		return;
     	}
 
-        bounds = new BoundingBox(position, rotation, new PVector(-SIZE,SIZE), new PVector(0,-SIZE), new PVector(SIZE,SIZE));
+        bounds = new BoundingBox(position, rotation, new PVector(-SIZE.value(),SIZE.value()), new PVector(0,-SIZE.value()), new PVector(SIZE.value(),SIZE.value()));
         if (antFarm.collides(this)) {
             return;
         }
@@ -130,16 +143,16 @@ public class Ant implements SceneObject {
         
         if(antFarm.isDrawViewDirectionEnabled()) {
         	antFarm.stroke(Color.RED.getRGB());
-        	antFarm.line(0, 0, 0, -4f * SIZE);
+        	antFarm.line(0, 0, 0, -4f * SIZE.value());
     	}
         
         antFarm.stroke(color);
         antFarm.fill(color);
         
         antFarm.beginShape();
-        antFarm.vertex(-SIZE, SIZE);
-        antFarm.vertex(0, -SIZE);
-        antFarm.vertex(SIZE, SIZE);
+        antFarm.vertex(-SIZE.value(), SIZE.value());
+        antFarm.vertex(0, -SIZE.value());
+        antFarm.vertex(SIZE.value(), SIZE.value());
         antFarm.endShape();
         
         antFarm.rotate(-rotation);
@@ -169,7 +182,7 @@ public class Ant implements SceneObject {
     
     private void leaveHive() {
     	position = hive.getSpawnPosition();
-        bounds = new BoundingBox(position, SIZE, SIZE);
+        bounds = new BoundingBox(position, SIZE.value(), SIZE.value());
     	visible = true;
     	PVector distance = PVector.sub(position, hive.getCenter());
     	float dot = hive.getCenter().x * distance.x + hive.getCenter().y * distance.y;
@@ -177,7 +190,7 @@ public class Ant implements SceneObject {
     	float magPosition = (float)Math.sqrt(distance.x * distance.x + distance.y * distance.y);
     	rotation = (float)Math.acos(dot / (magHive * magPosition));
     	wanderingTime = 0f;
-    	maxWanderingTime = antFarm.random(MIN_WANDERING_TIME, MAX_WANDERING_TIME);
+    	maxWanderingTime = antFarm.random(MIN_WANDERING_TIME.value(), MAX_WANDERING_TIME.value());
     	wander();
     }
 
