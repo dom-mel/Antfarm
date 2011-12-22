@@ -43,6 +43,7 @@ public class AntFarm extends PApplet {
         for (final int HIVE_COLOR : HIVE_COLORS) {
             staticSceneObjects.add(new Hive(this, HIVE_COLOR));
         }
+        spawnFood();
         overlay = new Overlay(this);
         speed = addSlider("speed", 0, 10, 2);
     }
@@ -186,7 +187,7 @@ public class AntFarm extends PApplet {
         return null;
     }
 
-    public boolean collides(final Ant me) {
+    public boolean collides(final SceneObject me) {
         final BoundingBox bounds = me.getBoundingBox();
         final PVector topLeft = bounds.getTopLeft();
         if (topLeft.x < 0 ||topLeft.y < 0) {
