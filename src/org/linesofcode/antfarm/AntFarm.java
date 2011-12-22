@@ -3,7 +3,9 @@ package org.linesofcode.antfarm;
 import controlP5.Slider;
 import org.linesofcode.antfarm.sceneObjects.*;
 import processing.core.PApplet;
+import processing.core.PVector;
 
+import javax.naming.OperationNotSupportedException;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
@@ -165,5 +167,13 @@ public class AntFarm extends PApplet {
             }
         }
         return null;
+    }
+
+    public boolean collides(Ant me, float futureRotation) {
+        return getIntersect(me) != null;
+    }
+
+    public boolean collides() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -2,6 +2,8 @@ package org.linesofcode.antfarm.sceneObjects;
 
 import processing.core.PVector;
 
+import java.util.Collection;
+
 public class BoundingBox {
     private PVector topLeft;
     private float width;
@@ -11,6 +13,14 @@ public class BoundingBox {
         this.topLeft = topLeft;
         this.width = width;
         this.height = height;
+    }
+
+    public BoundingBox(Collection<PVector> vertices) {
+        // TODO: compute bounds
+    }
+
+    public void draw() {
+        // TODO: draw bounds
     }
 
     public boolean intersects(BoundingBox other) {
@@ -24,6 +34,11 @@ public class BoundingBox {
             return false;
         }
         return topLeft.y + height >= other.topLeft.y;
+    }
+
+    public BoundingBox getTransformedBoundingBox(PVector position, float rotation) {
+        PVector.add(topLeft, position).rotate(rotation);
+        return new BoundingBox(topLeft, 0,0);
     }
 
 }
