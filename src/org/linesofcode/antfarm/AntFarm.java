@@ -5,7 +5,6 @@ import org.linesofcode.antfarm.sceneObjects.*;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import javax.naming.OperationNotSupportedException;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +22,7 @@ public class AntFarm extends PApplet {
             Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
+    private static final boolean SHOW_BOUNDS = true;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -59,7 +59,14 @@ public class AntFarm extends PApplet {
         }
         for (final Ant ant: ants) {
             ant.draw();
+            if (SHOW_BOUNDS) {
+                final BoundingBox bounds = ant.getBoundingBox();
+                if (bounds != null) {
+                    bounds.draw(this);
+                }
+            }
         }
+
         overlay.draw();
     }
 
@@ -146,22 +153,32 @@ public class AntFarm extends PApplet {
         return hives;
     }
 
-    public SceneObject getIntersect(final SceneObject me) {
-        final SceneObject staticIntersect = getIntersectWithStatic(me);
+    public SceneObject getCollidingObject(final SceneObject me) {
+        final SceneObject staticIntersect = getCollidingStaticObject(me);
         if (staticIntersect != null) {
             return staticIntersect;
         }
 
         for (final SceneObject another: ants) {
-            if (another.getBoundingBox().intersects(me.getBoundingBox())) {
+            if (another.equals(me)) {
+                continue;
+            }
+            final BoundingBox anotherBox = another.getBoundingBox();
+            if (anotherBox == null) {
+                continue;
+            }
+            if (anotherBox.intersects(me.getBoundingBox())) {
                 return another;
             }
         }
         return null;
     }
 
-    public SceneObject getIntersectWithStatic(final SceneObject me) {
+    public SceneObject getCollidingStaticObject(final SceneObject me) {
         for (final SceneObject another: staticSceneObjects) {
+            if (another.equals(me)) {
+                continue;
+            }
             if (another.getBoundingBox().intersects(me.getBoundingBox())) {
                 return another;
             }
@@ -169,11 +186,19 @@ public class AntFarm extends PApplet {
         return null;
     }
 
-    public boolean collides(Ant me, float futureRotation) {
-        return getIntersect(me) != null;
+    public boolean collides(final Ant me) {
+        final BoundingBox bounds = me.getBoundingBox();
+        final PVector topLeft = bounds.getTopLeft();
+        if (topLeft.x < 0 ||topLeft.y < 0) {
+            return true;
+        }
+        if (topLeft.x + bounds.getWidth() > width || topLeft.y + bounds.getHeight() > height) {
+            return true;
+        }
+        return getCollidingObject(me) != null;
     }
 
-    public boolean collides() {
+    public boolean collides(final Ant me, final float futureRotation) {
         throw new UnsupportedOperationException();
     }
 }

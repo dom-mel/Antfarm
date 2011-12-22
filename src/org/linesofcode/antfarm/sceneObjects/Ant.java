@@ -1,14 +1,12 @@
 package org.linesofcode.antfarm.sceneObjects;
 
-import java.awt.Color;
-
 import org.linesofcode.antfarm.AntFarm;
-import org.linesofcode.antfarm.behavior.PathFollowingBehavior;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
 import org.linesofcode.antfarm.behavior.WanderingBehavior;
-
 import processing.core.PVector;
+
+import java.awt.Color;
 
 public class Ant implements SceneObject {
 
@@ -121,6 +119,11 @@ public class Ant implements SceneObject {
     	if(!visible) {
     		return;
     	}
+
+        bounds = new BoundingBox(position, rotation, new PVector(-SIZE,SIZE), new PVector(0,-SIZE), new PVector(SIZE,SIZE));
+        if (antFarm.collides(this)) {
+            return;
+        }
     	
     	antFarm.translate(position.x, position.y);
         antFarm.rotate(rotation);
