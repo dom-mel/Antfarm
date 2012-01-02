@@ -8,7 +8,6 @@ public class Hive implements SceneObject {
 
     public final static float SIZE = 10;
     private static final float SPAWN_NOISE = 0.5f;
-    public final static float BORDER_SPANW_DISTANCE = 10;
 
     private long foodCount;
     private float spawnSpeed = 5;
@@ -71,8 +70,8 @@ public class Hive implements SceneObject {
     public PVector calcStaticSpawnPosition() {
         final PVector position = new PVector();
         while (true) {
-            position.x = antFarm.random(BORDER_SPANW_DISTANCE, antFarm.width - SIZE - BORDER_SPANW_DISTANCE);
-            position.y = antFarm.random(BORDER_SPANW_DISTANCE, antFarm.height - SIZE - BORDER_SPANW_DISTANCE);
+            position.x = antFarm.random(AntFarm.BORDER_SPANW_DISTANCE, antFarm.width - SIZE - AntFarm.BORDER_SPANW_DISTANCE);
+            position.y = antFarm.random(AntFarm.BORDER_SPANW_DISTANCE, antFarm.height - SIZE - AntFarm.BORDER_SPANW_DISTANCE);
             boolean correct = true;
             for (final Hive object: antFarm.getHives()) {
                 if (Math.abs(PVector.dist(position, object.position)) < AntFarm.MIN_STATIC_SPAWN_DISTANCE) {

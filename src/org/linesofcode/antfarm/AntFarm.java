@@ -22,6 +22,7 @@ public class AntFarm extends PApplet {
             Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
+    public final static float BORDER_SPANW_DISTANCE = 10;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
