@@ -45,7 +45,6 @@ public class AntFarm extends PApplet {
         }
         staticSceneObjects.add(new Food(this));
         overlay = new Overlay(this);
-        speed = addSlider("speed", 0, 10, 2);
     }
 
     @Override
@@ -126,10 +125,6 @@ public class AntFarm extends PApplet {
             }
         }
         removeObjects.remove(hive);
-    }
-
-    public Slider addSlider(final String name, final float min, final float max, final float defaultValue) {
-        return overlay.addSlider(name, min, max, defaultValue);
     }
 
 	public boolean isDrawViewDirectionEnabled() {
