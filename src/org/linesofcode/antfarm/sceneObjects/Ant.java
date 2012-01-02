@@ -93,6 +93,9 @@ public class Ant implements SceneObject, Obstacle {
         turn(behavior.getRotationDelta());
         computeViewDirection();
         move(delta);
+
+        // TODO Move next line (BB creation) to correct position
+        bounds = new BoundingBox(position, rotation, new PVector(-SIZE, SIZE), new PVector(0, -SIZE), new PVector(SIZE, SIZE));
     }
 
     private void computeViewDirection() {
@@ -112,7 +115,7 @@ public class Ant implements SceneObject, Obstacle {
 	}
     
 	public void draw() {
-		
+
     	if(!visible) {
     		return;
     	}
@@ -127,13 +130,13 @@ public class Ant implements SceneObject, Obstacle {
         
         antFarm.stroke(color);
         antFarm.fill(color);
-        
+
         antFarm.beginShape();
         antFarm.vertex(-SIZE, SIZE);
         antFarm.vertex(0, -SIZE);
         antFarm.vertex(SIZE, SIZE);
         antFarm.endShape();
-        
+
         antFarm.rotate(-rotation);
         antFarm.translate(-position.x, -position.y);
     }
@@ -161,7 +164,7 @@ public class Ant implements SceneObject, Obstacle {
     
     private void leaveHive() {
     	position = hive.getSpawnPosition();
-        bounds = new BoundingBox(position, SIZE, SIZE);
+
     	visible = true;
     	PVector distance = PVector.sub(position, hive.getCenter());
     	float dot = hive.getCenter().x * distance.x + hive.getCenter().y * distance.y;

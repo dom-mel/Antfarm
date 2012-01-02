@@ -63,6 +63,7 @@ public class AntFarm extends PApplet {
     }
 
     private void update(final float delta) {
+        overlay.update(delta);
 
         for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
@@ -77,8 +78,6 @@ public class AntFarm extends PApplet {
             }
             ant.update(delta);
         }
-
-        overlay.update(delta);
     }
 
     private void addAndRemoveSceneObjects() {
