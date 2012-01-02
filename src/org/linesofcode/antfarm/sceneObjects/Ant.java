@@ -224,4 +224,12 @@ public class Ant implements SceneObject, Obstacle {
 	public void setHeading(float angle) {
 		rotation = angle;
 	}
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setPosition(final PVector position) {
+        this.position = position;
+    }
 }

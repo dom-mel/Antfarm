@@ -144,12 +144,33 @@ public class AntFarm extends PApplet {
         return hives;
     }
 
-    public boolean isPathBlocked(final Ant ant, final PVector position) {
-        // TODO
+    public boolean isPathBlocked(final Ant me, final PVector translation) {
+        final BoundingBox myBox = me.getBoundingBox();
+        if (myBox == null) {
+            return false;
+        }
+        final BoundingBox box = myBox.getTransformedBoundingBox(translation, me.getRotation());
+        for (final Ant ant : ants) {
+            if (ant == me) {
+                continue;
+            }
+
+            if (ant.getBoundingBox() == null) {
+                continue;
+            }
+
+            if (ant.getBoundingBox().intersects(box)) {
+                return true;
+            }
+        }
         return false;
     }
 
-    public void moveAnt(final Ant ant, final PVector newPosition) {
-        // TODO
+    public void moveAnt(final Ant ant, final PVector newPosition) throws PathIsBlockedException {
+        if (isPathBlocked(ant, newPosition)) {
+            throw new PathIsBlockedException();
+        } else {
+            ant.setPosition(newPosition);
+        }
     }
 }
