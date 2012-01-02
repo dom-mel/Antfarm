@@ -37,11 +37,6 @@ public class Food implements SceneObject {
     public void update(final float delta) {
     }
 
-    @Override
-    public BoundingBox getBoundingBox() {
-        throw new UnsupportedOperationException();
-    }
-
     public void pickUp() {
         count--;
         if (count == 0) {

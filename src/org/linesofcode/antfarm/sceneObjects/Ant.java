@@ -1,16 +1,14 @@
 package org.linesofcode.antfarm.sceneObjects;
 
-import java.awt.Color;
-
 import org.linesofcode.antfarm.AntFarm;
-import org.linesofcode.antfarm.behavior.PathFollowingBehavior;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
 import org.linesofcode.antfarm.behavior.WanderingBehavior;
-
 import processing.core.PVector;
 
-public class Ant implements SceneObject {
+import java.awt.Color;
+
+public class Ant implements SceneObject, Obstacle {
 
 	// TODO read from config
 	public static float SIZE = 2f;
