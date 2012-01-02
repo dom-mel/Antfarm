@@ -24,7 +24,7 @@ public class Hive implements SceneObject {
     public Hive(final AntFarm antFarm, final int color) {
         this.antFarm = antFarm;
         this.color = color;
-        position = calcStaticSpawnPosition();
+        position = antFarm.calcStaticSpawnPosition(this, SIZE);
         lastSpawn = Float.MAX_VALUE;
     }
 
@@ -67,22 +67,7 @@ public class Hive implements SceneObject {
         return pos;
     }
 
-    public PVector calcStaticSpawnPosition() {
-        final PVector position = new PVector();
-        while (true) {
-            position.x = antFarm.random(AntFarm.BORDER_SPANW_DISTANCE, antFarm.width - SIZE - AntFarm.BORDER_SPANW_DISTANCE);
-            position.y = antFarm.random(AntFarm.BORDER_SPANW_DISTANCE, antFarm.height - SIZE - AntFarm.BORDER_SPANW_DISTANCE);
-            boolean correct = true;
-            for (final Hive object: antFarm.getHives()) {
-                if (Math.abs(PVector.dist(position, object.position)) < AntFarm.MIN_STATIC_SPAWN_DISTANCE) {
-                    correct = false;
-                    break;
-                }
-            }
-            if (correct) {
-                break;
-            }
-        }
+    public PVector getPosition() {
         return position;
     }
 }

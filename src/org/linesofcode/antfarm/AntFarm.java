@@ -43,6 +43,7 @@ public class AntFarm extends PApplet {
         for (final int HIVE_COLOR : HIVE_COLORS) {
             staticSceneObjects.add(new Hive(this, HIVE_COLOR));
         }
+        staticSceneObjects.add(new Food(this));
         overlay = new Overlay(this);
         speed = addSlider("speed", 0, 10, 2);
     }
@@ -135,16 +136,6 @@ public class AntFarm extends PApplet {
 		return drawViewDirection;
 	}
 
-    public Set<Hive> getHives() {
-        final Set<Hive> hives = new HashSet<Hive>();
-        for (final SceneObject object: staticSceneObjects) {
-            if (object instanceof Hive) {
-                hives.add((Hive) object);
-            }
-        }
-        return hives;
-    }
-
     public boolean isPathBlocked(final Ant me, final PVector translation) {
         final BoundingBox myBox = me.getBoundingBox();
         if (myBox == null) {
@@ -174,4 +165,33 @@ public class AntFarm extends PApplet {
             ant.setPosition(newPosition);
         }
     }
+
+    public PVector calcStaticSpawnPosition(final SceneObject me, float size) {
+        final PVector position = new PVector();
+        while (true) {
+            position.x = random(BORDER_SPANW_DISTANCE, width - size - BORDER_SPANW_DISTANCE);
+            position.y = random(BORDER_SPANW_DISTANCE, height - size - BORDER_SPANW_DISTANCE);
+            boolean correct = true;
+            for (final SceneObject object: staticSceneObjects) {
+                final PVector objectPosition;
+                if (object instanceof Hive) {
+                    objectPosition = ((Hive) object).getPosition();
+                } else if (object instanceof Food) {
+                    objectPosition = ((Food) object).getPosition();
+                } else {
+                    continue;
+                }
+
+                if (Math.abs(PVector.dist(position, objectPosition)) < MIN_STATIC_SPAWN_DISTANCE) {
+                    correct = false;
+                    break;
+                }
+            }
+            if (correct) {
+                break;
+            }
+        }
+        return position;
+    }
+
 }
