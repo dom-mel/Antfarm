@@ -19,7 +19,8 @@ public class WanderingBehavior implements SteeringBehavior {
 	
 	@Override
 	public float getRotationDelta() {
-		return rotationDelta;
+//		return rotationDelta;
+		return 0f;
 	}
 
 	@Override

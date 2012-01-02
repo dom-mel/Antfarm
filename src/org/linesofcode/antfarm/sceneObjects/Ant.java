@@ -177,11 +177,12 @@ public class Ant implements SceneObject {
     	position = hive.getSpawnPosition();
         bounds = new BoundingBox(position, SIZE, SIZE);
     	visible = true;
+    	
     	PVector distance = PVector.sub(position, hive.getCenter());
-    	float dot = hive.getCenter().x * distance.x + hive.getCenter().y * distance.y;
-    	float magHive = (float)Math.sqrt(hive.getCenter().x * hive.getCenter().x + hive.getCenter().y * hive.getCenter().y);
-    	float magPosition = (float)Math.sqrt(distance.x * distance.x + distance.y * distance.y);
-    	rotation = (float)Math.acos(dot / (magHive * magPosition));
+    	distance.normalize();
+    	PVector up = new PVector(0f, 1f);
+    	rotation = PVector.angleBetween(distance, up);
+    	
     	wanderingTime = 0f;
     	maxWanderingTime = antFarm.random(MIN_WANDERING_TIME, MAX_WANDERING_TIME);
     	wander();
