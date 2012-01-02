@@ -31,7 +31,11 @@ public class WanderingBehavior implements SteeringBehavior {
 		}
 		
 		timeSinceLastUpdate = 0;
-		rotationDelta = getRandomNumber(MIN_ANGLE, MAX_ANGLE) * (float)Math.pow(-1.0, random.nextInt(30));
+		setRotationDelta(getRandomNumber(MIN_ANGLE, MAX_ANGLE) * (float)Math.pow(-1.0, random.nextInt(30)));
+	}
+
+	private void setRotationDelta(float angleInDegrees) {
+		rotationDelta = (float)Math.toRadians(angleInDegrees);
 	}
 
 	private float getRandomNumber(float min, float max) {

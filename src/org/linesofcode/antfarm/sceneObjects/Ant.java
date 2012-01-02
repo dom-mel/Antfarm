@@ -21,8 +21,8 @@ public class Ant implements SceneObject {
     public static float MAX_TIME_TO_LIVE = 180f;
     public static float MOVEMENT_RATE = 30f;
     public static float TURN_RATE = AntFarm.radians(45f);
-    public static float MIN_WANDERING_TIME = 60f;
-    public static float MAX_WANDERING_TIME = 90f;
+    public static float MIN_WANDERING_TIME = 10f;
+    public static float MAX_WANDERING_TIME = 15f;
 
     private final AntFarm antFarm;
     private final Hive hive;
@@ -31,7 +31,6 @@ public class Ant implements SceneObject {
     private boolean visible = false;
     private int color;
     private float rotation = 0f;
-    private float rotationDelta;
     
     private AntState state;
     private boolean carriesFood;
@@ -50,7 +49,6 @@ public class Ant implements SceneObject {
         timeToLive = antFarm.random(25f, 40f);
         speedMultiplier = antFarm.random(0.75f, 1.25f);
         enterHive();
-        rotationDelta = AntFarm.radians(180f);
     }
 
     public void update(float delta) {
@@ -95,7 +93,7 @@ public class Ant implements SceneObject {
         }
         
         behavior.update(delta);
-        turn((float)Math.toRadians(behavior.getRotationDelta()));
+        turn(behavior.getRotationDelta());
         computeViewDirection();
         move(delta);
     }
@@ -218,4 +216,12 @@ public class Ant implements SceneObject {
     public BoundingBox getBoundingBox() {
         return bounds;
     }
+
+	public float getHeading() {
+		return rotation;
+	}
+
+	public void setHeading(float angle) {
+		rotation = angle;
+	}
 }
