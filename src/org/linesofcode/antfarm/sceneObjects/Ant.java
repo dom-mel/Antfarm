@@ -75,7 +75,10 @@ public class Ant implements SceneObject {
         	break;
         }
         case RETURNING_HOME: {
-        	// TODO enter hive, if collision with hive
+        	if(isNearHive()) {
+        		enterHive();
+        		break;
+        	}
         	if(carriesFood) {
         		putTrail();
         	}
@@ -94,10 +97,18 @@ public class Ant implements SceneObject {
         behavior.update(delta);
         turn(behavior.getRotationDelta());
         computeViewDirection();
+        // TODO check: path blocked?
         move(delta);
+        // TODO dodge if collision
     }
 
-    private void computeViewDirection() {
+    private boolean isNearHive() {
+    	float dx = Math.abs(position.x - hive.getCenter().x);
+    	float dy = Math.abs(position.y - hive.getCenter().y);
+		return dx <= (Hive.SIZE / 2) && dy <= (Hive.SIZE / 2);
+	}
+
+	private void computeViewDirection() {
 		viewDirection.x = AntFarm.sin(rotation);
 		viewDirection.y = -AntFarm.cos(rotation);
 		viewDirection.normalize();
@@ -106,7 +117,8 @@ public class Ant implements SceneObject {
     private void move(float delta) {
     	PVector velocity = PVector.mult(viewDirection, MOVEMENT_RATE * delta);
     	velocity.mult(speedMultiplier);
-    	position.add(velocity);
+    	PVector newPosition = PVector.add(position, velocity);
+    	antFarm.moveAnt(this, newPosition);
     }
     
 	private void turn(float delta) {
@@ -222,5 +234,9 @@ public class Ant implements SceneObject {
 
 	public void setHeading(float angle) {
 		rotation = angle;
+	}
+
+	public void setPosition(PVector newPosition) {
+		position = newPosition;
 	}
 }

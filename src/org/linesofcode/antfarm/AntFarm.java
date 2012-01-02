@@ -14,12 +14,12 @@ public class AntFarm extends PApplet {
 
     private static final int[] HIVE_COLORS = {
             Color.BLUE.getRGB(),
-            Color.RED.getRGB(),
-            Color.YELLOW.getRGB(),
-            Color.PINK.getRGB(),
-            Color.MAGENTA.getRGB(),
-            new Color(148, 56, 161).getRGB(),
-            Color.WHITE.getRGB()
+//            Color.RED.getRGB(),
+//            Color.YELLOW.getRGB(),
+//            Color.PINK.getRGB(),
+//            Color.MAGENTA.getRGB(),
+//            new Color(148, 56, 161).getRGB(),
+//            Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
 
@@ -33,7 +33,7 @@ public class AntFarm extends PApplet {
 
     private Slider speed;
 
-	private boolean drawViewDirection = false;
+	private boolean drawViewDirection = true;
 
     @Override
     public void setup() {
@@ -152,5 +152,6 @@ public class AntFarm extends PApplet {
 
     public void moveAnt(final Ant ant, final PVector newPosition) {
         // TODO
+    	ant.setPosition(newPosition);
     }
 }
