@@ -8,7 +8,6 @@ public class Hive implements SceneObject {
 
     public final static float SIZE = 10;
     private static final float SPAWN_NOISE = 0.5f;
-    public final static float BORDER_SPANW_DISTANCE = 10;
 
     private long foodCount;
     private float spawnSpeed = 5;
@@ -21,13 +20,11 @@ public class Hive implements SceneObject {
     private float lastSpawn;
 
     private final AntFarm antFarm;
-    private final BoundingBox bounds;
 
     public Hive(final AntFarm antFarm, final int color) {
         this.antFarm = antFarm;
         this.color = color;
-        position = calcStaticSpawnPosition();
-        bounds = new BoundingBox(position, SIZE, SIZE);
+        position = antFarm.calcStaticSpawnPosition(this, SIZE);
         lastSpawn = Float.MAX_VALUE;
     }
 
@@ -70,28 +67,7 @@ public class Hive implements SceneObject {
         return pos;
     }
 
-    public PVector calcStaticSpawnPosition() {
-        final PVector position = new PVector();
-        while (true) {
-            position.x = antFarm.random(BORDER_SPANW_DISTANCE, antFarm.width - SIZE - BORDER_SPANW_DISTANCE);
-            position.y = antFarm.random(BORDER_SPANW_DISTANCE, antFarm.height - SIZE - BORDER_SPANW_DISTANCE);
-            boolean correct = true;
-            for (final Hive object: antFarm.getHives()) {
-                if (Math.abs(PVector.dist(position, object.position)) < AntFarm.MIN_STATIC_SPAWN_DISTANCE) {
-                    correct = false;
-                    break;
-                }
-            }
-            if (correct) {
-                break;
-            }
-        }
+    public PVector getPosition() {
         return position;
     }
-
-    @Override
-    public BoundingBox getBoundingBox() {
-        return bounds;
-    }
-
 }

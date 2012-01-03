@@ -1,20 +1,17 @@
 package org.linesofcode.antfarm.sceneObjects;
 
-import java.awt.Color;
-
 import org.linesofcode.antfarm.AntFarm;
-import org.linesofcode.antfarm.ObstacleCollisionException;
 import org.linesofcode.antfarm.OutOfBoundsException;
-import org.linesofcode.antfarm.behavior.PathFollowingBehavior;
+import org.linesofcode.antfarm.PathIsBlockedException;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
 import org.linesofcode.antfarm.behavior.WanderingBehavior;
-
 import processing.core.PVector;
 
-public class Ant implements SceneObject {
+import java.awt.Color;
 
-	// TODO read from config
+public class Ant implements SceneObject, Obstacle {
+
 	public static float SIZE = 2f;
     public static float MAX_IDLE_TIME = 5f;
     public static float VIEW_DISTANCE = 30f;
@@ -101,7 +98,8 @@ public class Ant implements SceneObject {
         computeViewDirection();
         // TODO check: path blocked?
         move(delta);
-        // TODO dodge if collision
+        // TODO Move next line (BB creation) to correct position
+        bounds = new BoundingBox(position, rotation, new PVector(-SIZE, SIZE), new PVector(0, -SIZE), new PVector(SIZE, SIZE));
     }
 
     private boolean isNearHive() {
@@ -126,8 +124,9 @@ public class Ant implements SceneObject {
 			antFarm.moveAnt(this, newPosition);
 		} catch (OutOfBoundsException e) {
 			// TODO change direction
-		} catch (ObstacleCollisionException e) {
-			// TODO dodge
+		} catch (PathIsBlockedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
     }
     
@@ -136,7 +135,7 @@ public class Ant implements SceneObject {
 	}
     
 	public void draw() {
-		
+
     	if(!visible) {
     		return;
     	}
@@ -151,13 +150,13 @@ public class Ant implements SceneObject {
         
         antFarm.stroke(color);
         antFarm.fill(color);
-        
+
         antFarm.beginShape();
         antFarm.vertex(-SIZE, SIZE);
         antFarm.vertex(0, -SIZE);
         antFarm.vertex(SIZE, SIZE);
         antFarm.endShape();
-        
+
         antFarm.rotate(-rotation);
         antFarm.translate(-position.x, -position.y);
     }
@@ -185,7 +184,7 @@ public class Ant implements SceneObject {
     
     private void leaveHive() {
     	position = hive.getSpawnPosition();
-        bounds = new BoundingBox(position, SIZE, SIZE);
+
     	visible = true;
     	
     	PVector distance = PVector.sub(position, hive.getCenter());
@@ -250,4 +249,8 @@ public class Ant implements SceneObject {
 	public void setPosition(PVector newPosition) {
 		position = newPosition;
 	}
+
+	public float getRotation() {
+        return rotation;
+    }
 }

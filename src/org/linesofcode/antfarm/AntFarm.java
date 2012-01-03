@@ -22,6 +22,7 @@ public class AntFarm extends PApplet {
 //            Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
+    public final static float BORDER_SPANW_DISTANCE = 10;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -42,8 +43,8 @@ public class AntFarm extends PApplet {
         for (final int HIVE_COLOR : HIVE_COLORS) {
             staticSceneObjects.add(new Hive(this, HIVE_COLOR));
         }
+        staticSceneObjects.add(new Food(this));
         overlay = new Overlay(this);
-        speed = addSlider("speed", 0, 10, 2);
     }
 
     @Override
@@ -63,6 +64,7 @@ public class AntFarm extends PApplet {
     }
 
     private void update(final float delta) {
+        overlay.update(delta);
 
         for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
@@ -77,8 +79,6 @@ public class AntFarm extends PApplet {
             }
             ant.update(delta);
         }
-
-        overlay.update(delta);
     }
 
     private void addAndRemoveSceneObjects() {
@@ -127,31 +127,66 @@ public class AntFarm extends PApplet {
         removeObjects.remove(hive);
     }
 
-    public Slider addSlider(final String name, final float min, final float max, final float defaultValue) {
-        return overlay.addSlider(name, min, max, defaultValue);
-    }
-
 	public boolean isDrawViewDirectionEnabled() {
 		return drawViewDirection;
 	}
 
-    public Set<Hive> getHives() {
-        final Set<Hive> hives = new HashSet<Hive>();
-        for (final SceneObject object: staticSceneObjects) {
-            if (object instanceof Hive) {
-                hives.add((Hive) object);
+    public boolean isPathBlocked(final Ant me, final PVector translation) {
+        final BoundingBox myBox = me.getBoundingBox();
+        if (myBox == null) {
+            return false;
+        }
+        final BoundingBox box = myBox.getTransformedBoundingBox(translation, me.getRotation());
+        for (final Ant ant : ants) {
+            if (ant == me) {
+                continue;
+            }
+
+            if (ant.getBoundingBox() == null) {
+                continue;
+            }
+
+            if (ant.getBoundingBox().intersects(box)) {
+                return true;
             }
         }
-        return hives;
-    }
-
-    public boolean isPathBlocked(final Ant ant, final PVector position) {
-        // TODO
         return false;
     }
 
-    public void moveAnt(final Ant ant, final PVector newPosition) throws OutOfBoundsException, ObstacleCollisionException {
-        // TODO
-    	ant.setPosition(newPosition);
+    public void moveAnt(final Ant ant, final PVector newPosition) throws OutOfBoundsException, PathIsBlockedException {
+        if (isPathBlocked(ant, newPosition)) {
+            throw new PathIsBlockedException();
+        } else {
+            ant.setPosition(newPosition);
+        }
     }
+
+    public PVector calcStaticSpawnPosition(final SceneObject me, float size) {
+        final PVector position = new PVector();
+        while (true) {
+            position.x = random(BORDER_SPANW_DISTANCE, width - size - BORDER_SPANW_DISTANCE);
+            position.y = random(BORDER_SPANW_DISTANCE, height - size - BORDER_SPANW_DISTANCE);
+            boolean correct = true;
+            for (final SceneObject object: staticSceneObjects) {
+                final PVector objectPosition;
+                if (object instanceof Hive) {
+                    objectPosition = ((Hive) object).getPosition();
+                } else if (object instanceof Food) {
+                    objectPosition = ((Food) object).getPosition();
+                } else {
+                    continue;
+                }
+
+                if (Math.abs(PVector.dist(position, objectPosition)) < MIN_STATIC_SPAWN_DISTANCE) {
+                    correct = false;
+                    break;
+                }
+            }
+            if (correct) {
+                break;
+            }
+        }
+        return position;
+    }
+
 }
