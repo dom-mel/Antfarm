@@ -3,6 +3,8 @@ package org.linesofcode.antfarm.sceneObjects;
 import java.awt.Color;
 
 import org.linesofcode.antfarm.AntFarm;
+import org.linesofcode.antfarm.ObstacleCollisionException;
+import org.linesofcode.antfarm.OutOfBoundsException;
 import org.linesofcode.antfarm.behavior.PathFollowingBehavior;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
@@ -115,10 +117,18 @@ public class Ant implements SceneObject {
 	}
 
     private void move(float delta) {
+    	
     	PVector velocity = PVector.mult(viewDirection, MOVEMENT_RATE * delta);
     	velocity.mult(speedMultiplier);
     	PVector newPosition = PVector.add(position, velocity);
-    	antFarm.moveAnt(this, newPosition);
+    	
+    	try {
+			antFarm.moveAnt(this, newPosition);
+		} catch (OutOfBoundsException e) {
+			// TODO change direction
+		} catch (ObstacleCollisionException e) {
+			// TODO dodge
+		}
     }
     
 	private void turn(float delta) {

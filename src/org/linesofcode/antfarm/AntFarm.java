@@ -150,7 +150,7 @@ public class AntFarm extends PApplet {
         return false;
     }
 
-    public void moveAnt(final Ant ant, final PVector newPosition) {
+    public void moveAnt(final Ant ant, final PVector newPosition) throws OutOfBoundsException, ObstacleCollisionException {
         // TODO
     	ant.setPosition(newPosition);
     }
