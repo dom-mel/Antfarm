@@ -2,6 +2,7 @@ package org.linesofcode.antfarm;
 
 import controlP5.Slider;
 import org.linesofcode.antfarm.sceneObjects.*;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -34,7 +35,7 @@ public class AntFarm extends PApplet {
 
     private Slider speed;
 
-	private boolean drawViewDirection = true;
+	private boolean drawViewDirection = false;
 
     @Override
     public void setup() {
@@ -154,14 +155,26 @@ public class AntFarm extends PApplet {
     }
 
     public void moveAnt(final Ant ant, final PVector newPosition) throws OutOfBoundsException, PathIsBlockedException {
-        if (isPathBlocked(ant, newPosition)) {
+       
+    	assertAntInBounds(newPosition);
+    	
+    	if (isPathBlocked(ant, newPosition)) {
             throw new PathIsBlockedException();
-        } else {
-            ant.setPosition(newPosition);
         }
+        
+        ant.setPosition(newPosition);
     }
 
-    public PVector calcStaticSpawnPosition(final SceneObject me, float size) {
+    private void assertAntInBounds(PVector newPosition) throws OutOfBoundsException {
+    	if((newPosition.x + Ant.SIZE) > width || (newPosition.x - Ant.SIZE) < 0) {
+    		throw new OutOfBoundsException(OutOfBoundsException.Direction.X_AXIS);
+    	}
+    	if((newPosition.y + Ant.SIZE) > height || (newPosition.y - Ant.SIZE) < 0) {
+    		throw new OutOfBoundsException(OutOfBoundsException.Direction.Y_AXIS);
+    	}
+	}
+
+	public PVector calcStaticSpawnPosition(final SceneObject me, float size) {
         final PVector position = new PVector();
         while (true) {
             position.x = random(BORDER_SPANW_DISTANCE, width - size - BORDER_SPANW_DISTANCE);

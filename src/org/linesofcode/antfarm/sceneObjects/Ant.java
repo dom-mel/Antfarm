@@ -16,11 +16,11 @@ public class Ant implements SceneObject, Obstacle {
     public static float MAX_IDLE_TIME = 5f;
     public static float VIEW_DISTANCE = 30f;
     public static float FIELD_OF_VIEW = 120f;
-    public static float MIN_TIME_TO_LIVE = 120f;
-    public static float MAX_TIME_TO_LIVE = 180f;
+    public static float MIN_TIME_TO_LIVE = 320f;
+    public static float MAX_TIME_TO_LIVE = 500f;
     public static float MOVEMENT_RATE = 30f;
-    public static float MIN_WANDERING_TIME = 10f;
-    public static float MAX_WANDERING_TIME = 15f;
+    public static float MIN_WANDERING_TIME = 60f;
+    public static float MAX_WANDERING_TIME = 90f;
 
     private final AntFarm antFarm;
     private final Hive hive;
@@ -37,14 +37,15 @@ public class Ant implements SceneObject, Obstacle {
     private float idleTime;
     private float wanderingTime;
     private float maxWanderingTime;
-    SteeringBehavior behavior;
+    private SteeringBehavior behavior;
     private BoundingBox bounds;
+	private boolean overrideBehavior;
 
     public Ant(AntFarm antFarm, Hive hive) {
         this.antFarm = antFarm;
         this.hive = hive;
         color = hive.getColor();
-        timeToLive = antFarm.random(25f, 40f);
+        timeToLive = antFarm.random(MIN_TIME_TO_LIVE, MAX_TIME_TO_LIVE);
         speedMultiplier = antFarm.random(0.75f, 1.25f);
         enterHive();
     }
@@ -94,11 +95,11 @@ public class Ant implements SceneObject, Obstacle {
         }
         
         behavior.update(delta);
-        turn(behavior.getRotationDelta());
+        if(!overrideBehavior) {
+        	turn(behavior.getRotationDelta());
+        }
         computeViewDirection();
-        // TODO check: path blocked?
         move(delta);
-        // TODO Move next line (BB creation) to correct position
         bounds = new BoundingBox(position, rotation, new PVector(-SIZE, SIZE), new PVector(0, -SIZE), new PVector(SIZE, SIZE));
     }
 
@@ -122,11 +123,19 @@ public class Ant implements SceneObject, Obstacle {
     	
     	try {
 			antFarm.moveAnt(this, newPosition);
+			overrideBehavior = false;
 		} catch (OutOfBoundsException e) {
-			// TODO change direction
+			overrideBehavior = true;
+			if(e.getDirection() == OutOfBoundsException.Direction.Y_AXIS) {
+				rotation = (float)Math.toRadians(180.0) - rotation;
+				return;
+			}
+			if(e.getDirection() == OutOfBoundsException.Direction.X_AXIS) {
+				rotation = -rotation;
+				return;
+			}
 		} catch (PathIsBlockedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// movement is prohibited
 		}
     }
     
@@ -156,6 +165,10 @@ public class Ant implements SceneObject, Obstacle {
         antFarm.vertex(0, -SIZE);
         antFarm.vertex(SIZE, SIZE);
         antFarm.endShape();
+        
+        if(carriesFood) {
+        	// TODO draw some food
+        }
 
         antFarm.rotate(-rotation);
         antFarm.translate(-position.x, -position.y);
