@@ -1,11 +1,14 @@
 package org.linesofcode.antfarm;
 
 import controlP5.Slider;
-
 import org.linesofcode.antfarm.exception.OutOfBoundsException;
 import org.linesofcode.antfarm.exception.PathIsBlockedException;
-import org.linesofcode.antfarm.sceneObjects.*;
-
+import org.linesofcode.antfarm.sceneObjects.Ant;
+import org.linesofcode.antfarm.sceneObjects.BoundingBox;
+import org.linesofcode.antfarm.sceneObjects.Food;
+import org.linesofcode.antfarm.sceneObjects.Hive;
+import org.linesofcode.antfarm.sceneObjects.Overlay;
+import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -250,5 +253,13 @@ public class AntFarm extends PApplet {
 		}
 		return null;
 	}
+
+    public void putPheromone(final Ant me) {
+        // FIXME
+    }
+
+    public PVector getClosePheromoneTrail(final Ant me) {
+        throw new UnsupportedOperationException();
+    }
 
 }
