@@ -44,6 +44,7 @@ public class AntFarm extends PApplet {
 
 	private boolean drawViewDirection = false;
 	private int currentFoodCount = 0;
+	private float timeLapse = 4f;
 
     @Override
     public void setup() {
@@ -75,8 +76,11 @@ public class AntFarm extends PApplet {
         overlay.draw();
     }
 
-    private void update(final float delta) {
+    private void update(float delta) {
+    	
         overlay.update(delta);
+        
+        delta *= timeLapse;
 
         for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
