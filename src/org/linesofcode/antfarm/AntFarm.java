@@ -32,7 +32,7 @@ public class AntFarm extends PApplet {
     public static final float BORDER_SPANW_DISTANCE = 10;
     public static final int FOOD_COUNT = 2;
 
-    public static float timeLapse = 4f;
+    public static float timeLapse = 1f;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -145,7 +145,7 @@ public class AntFarm extends PApplet {
                 removeAnt(ant);
             }
         }
-        removeObjects.remove(hive);
+        removeObjects.add(hive);
     }
 
 	public boolean isDrawViewDirectionEnabled() {
