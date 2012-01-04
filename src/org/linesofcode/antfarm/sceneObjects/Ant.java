@@ -269,6 +269,7 @@ public class Ant implements SceneObject, Obstacle {
     public void die() {
     	visible = false;
     	antFarm.removeAnt(this);
+    	hive.decreaseAnts();
     }
 
     public AntFarm getAntFarm() {

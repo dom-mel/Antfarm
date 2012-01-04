@@ -7,11 +7,13 @@ import processing.core.PVector;
 public class Hive implements SceneObject {
 
     public final static float SIZE = 10;
-    private static final float SPAWN_NOISE = 0.5f;
+    public static final float SPAWN_NOISE = 0.5f;
+    public static final int INITIAL_FOOD_COUNT = 1;
 
-    private long foodCount = 5;
+    private long foodCount = INITIAL_FOOD_COUNT;
     private float spawnSpeed = 5f;
-    private int ants;
+    private int ants = 0;
+    private int antsAllive = 0;
 
     private PVector position;
     private int color;
@@ -34,6 +36,7 @@ public class Hive implements SceneObject {
         	if(foodCount > 0) {
         		antFarm.spawnAnt(this);
         		decreaseFood();
+        		antsAllive++;
         		lastSpawn = - antFarm.random(1, SIZE * SPAWN_NOISE);
         	}
         }
@@ -80,4 +83,11 @@ public class Hive implements SceneObject {
     public PVector getPosition() {
         return position;
     }
+
+	public void decreaseAnts() {
+		antsAllive--;
+		if(antsAllive == 0 && foodCount == 0) {
+			antFarm.removeHive(this);
+		}
+	}
 }
