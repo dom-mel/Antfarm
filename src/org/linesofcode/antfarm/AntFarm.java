@@ -10,7 +10,7 @@ import org.linesofcode.antfarm.sceneObjects.Hive;
 import org.linesofcode.antfarm.sceneObjects.Overlay;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import processing.core.PApplet;
-import processing.core.PImage;
+import processing.core.PGraphics;
 import processing.core.PVector;
 
 import java.awt.Color;
@@ -42,7 +42,7 @@ public class AntFarm extends PApplet {
     private final Set<SceneObject> addObjects = new HashSet<SceneObject>();
 
     private Overlay overlay;
-    private PImage pheromones;
+    private PGraphics pheromones;
 
     private Slider speed;
 
@@ -62,14 +62,16 @@ public class AntFarm extends PApplet {
         }
         overlay = new Overlay(this);
 
-        pheromones = createImage(width, height, color(1,1,1,1));
+        pheromones = createGraphics(width, height, P2D);
+        pheromones.background(color(1,0));
     }
 
     @Override
     public void draw() {
         update(1 / frameRate);
         background(Color.LIGHT_GRAY.getRGB());
-        image(pheromones,0,0);
+
+        image(pheromones, 0, 0);
 
         for (final SceneObject sceneObject: staticSceneObjects) {
             sceneObject.draw();
@@ -85,7 +87,7 @@ public class AntFarm extends PApplet {
         overlay.update(delta);
         
         delta *= timeLapse;
-
+        fadeOutPheromoneTrails(delta);
         for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
                 continue;
@@ -269,6 +271,19 @@ public class AntFarm extends PApplet {
 
     public PVector getClosePheromoneTrail(final Ant me) {
         throw new UnsupportedOperationException();
+    }
+
+    private void fadeOutPheromoneTrails(final float delta) {
+
+        for (int w = 0; w < width; w++) {
+            for (int h = 0; h < height; h++) {
+                final int pixel = pheromones.get(w, h);
+                if (alpha(pixel) == 0) {
+                    continue;
+                }
+                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
+            }
+        }
     }
 
 }
