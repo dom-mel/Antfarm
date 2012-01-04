@@ -53,6 +53,15 @@ public class Overlay {
         });
         sliders.add(antSize);
 
+        final Slider timeLaps = controlP5.addSlider("Timelaps", 1, 20, AntFarm.timeLapse, 10, 80, 100, 20);
+        timeLaps.moveTo(defaultTab);
+        timeLaps.addListener(new ControlListener() {
+            @Override
+            public void controlEvent(final ControlEvent controlEvent) {
+                AntFarm.timeLapse = timeLaps.value();
+            }
+        });
+        sliders.add(timeLaps);
     }
 
 

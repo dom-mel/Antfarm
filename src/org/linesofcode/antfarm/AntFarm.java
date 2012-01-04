@@ -32,6 +32,8 @@ public class AntFarm extends PApplet {
     public static final float BORDER_SPANW_DISTANCE = 10;
     public static final int FOOD_COUNT = 2;
 
+    public static float timeLapse = 4f;
+
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
 
@@ -44,7 +46,6 @@ public class AntFarm extends PApplet {
 
 	private boolean drawViewDirection = false;
 	private int currentFoodCount = 0;
-	private float timeLapse = 4f;
 
     @Override
     public void setup() {
