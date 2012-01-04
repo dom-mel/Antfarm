@@ -10,6 +10,7 @@ import org.linesofcode.antfarm.sceneObjects.Hive;
 import org.linesofcode.antfarm.sceneObjects.Overlay;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.Color;
@@ -41,6 +42,7 @@ public class AntFarm extends PApplet {
     private final Set<SceneObject> addObjects = new HashSet<SceneObject>();
 
     private Overlay overlay;
+    private PImage pheromones;
 
     private Slider speed;
 
@@ -59,14 +61,15 @@ public class AntFarm extends PApplet {
         	currentFoodCount++;
         }
         overlay = new Overlay(this);
+
+        pheromones = createImage(width, height, color(1,1,1,1));
     }
 
     @Override
     public void draw() {
-        background(Color.LIGHT_GRAY.getRGB());
-
         update(1 / frameRate);
-        addAndRemoveSceneObjects();
+        background(Color.LIGHT_GRAY.getRGB());
+        image(pheromones,0,0);
 
         for (final SceneObject sceneObject: staticSceneObjects) {
             sceneObject.draw();
@@ -96,6 +99,7 @@ public class AntFarm extends PApplet {
             }
             ant.update(delta);
         }
+        addAndRemoveSceneObjects();
     }
 
     private void addAndRemoveSceneObjects() {
@@ -260,7 +264,7 @@ public class AntFarm extends PApplet {
 	}
 
     public void putPheromone(final Ant me) {
-        // FIXME
+        pheromones.set((int) me.getPosition().x, (int) me.getPosition().y, me.getHive().getColor());
     }
 
     public PVector getClosePheromoneTrail(final Ant me) {
