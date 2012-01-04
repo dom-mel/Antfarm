@@ -7,17 +7,15 @@ import java.awt.Color;
 
 public class Food implements SceneObject {
 	
-	private static final int MAX_COUNT = 1000;
-	private static final int SIZE = 10; 
+	private static int MAX_COUNT = 1000;
+	private static int SIZE = 10;
+	public static int outlineColor = Color.BLACK.getRGB();
+	public static int color = Color.GREEN.getRGB();
 
     private int count;
-    
     private PVector position;
-
     private final AntFarm antFarm;
-
-	private final int outlineColor = Color.BLACK.getRGB();
-	private final int color = Color.GREEN.getRGB();
+    private float relativeSize;
 
     public Food(final AntFarm antFarm) {
         this.antFarm = antFarm;
@@ -29,7 +27,7 @@ public class Food implements SceneObject {
     	antFarm.stroke(outlineColor);
         antFarm.fill(color);
         // make the size of the food source shrink while it depletes
-        final float relativeSize = ((float) count  / MAX_COUNT) * SIZE;
+        relativeSize = ((float) count  / MAX_COUNT) * SIZE;
         antFarm.ellipse(position.x, position.y, relativeSize, relativeSize);
     }
 
@@ -50,5 +48,9 @@ public class Food implements SceneObject {
 
     public PVector getPosition() {
         return position;
+    }
+    
+    public float getRelativeSize() {
+    	return relativeSize;
     }
 }

@@ -2,6 +2,7 @@ package org.linesofcode.antfarm.sceneObjects;
 
 import org.linesofcode.antfarm.AntFarm;
 import org.linesofcode.antfarm.OutOfBoundsException;
+import org.linesofcode.antfarm.OutOfBoundsException.Direction;
 import org.linesofcode.antfarm.PathIsBlockedException;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
@@ -40,6 +41,7 @@ public class Ant implements SceneObject, Obstacle {
     private SteeringBehavior behavior;
     private BoundingBox bounds;
 	private boolean overrideBehavior;
+	private Food foodTarget;
 
     public Ant(AntFarm antFarm, Hive hive) {
         this.antFarm = antFarm;
@@ -70,6 +72,19 @@ public class Ant implements SceneObject, Obstacle {
         	// TODO check food / trail found
         	wanderingTime += delta;
         	if(wanderingTime >= maxWanderingTime) {
+        		returnHome();
+        		break;
+        	}
+        	Food food = antFarm.getFoodInProximity(this);
+        	if(food != null) {
+        		approachFood(food);
+        	}
+        	break;
+        }
+        case APPROACHING_FOOD: {
+        	if(isFoodClose(foodTarget)) {
+        		pickupFood(foodTarget);
+        		foodTarget = null;
         		returnHome();
         	}
         	break;
@@ -103,7 +118,19 @@ public class Ant implements SceneObject, Obstacle {
         bounds = new BoundingBox(position, rotation, new PVector(-SIZE, SIZE), new PVector(0, -SIZE), new PVector(SIZE, SIZE));
     }
 
-    private boolean isNearHive() {
+    private boolean isFoodClose(Food foodTarget) {
+    	float dx = Math.abs(position.x - foodTarget.getPosition().x);
+    	float dy = Math.abs(position.y - foodTarget.getPosition().y);
+		return dx <= (foodTarget.getRelativeSize() / 2) && dy <= (foodTarget.getRelativeSize() / 2);
+	}
+
+	private void approachFood(Food food) {
+		foodTarget = food;
+		state = AntState.APPROACHING_FOOD;
+		behavior = new SeekBehavior(food.getPosition(), this);
+	}
+
+	private boolean isNearHive() {
     	float dx = Math.abs(position.x - hive.getCenter().x);
     	float dy = Math.abs(position.y - hive.getCenter().y);
 		return dx <= (Hive.SIZE / 2) && dy <= (Hive.SIZE / 2);
@@ -121,24 +148,35 @@ public class Ant implements SceneObject, Obstacle {
     	velocity.mult(speedMultiplier);
     	PVector newPosition = PVector.add(position, velocity);
     	
+    	if(antFarm.isPathBlocked(this, newPosition)) {
+    		// FIXME doesn't work; see #25
+    		overrideBehavior = true;
+    		turn((float)Math.toRadians(-90.0));
+    		return;
+    	}
+    	
     	try {
 			antFarm.moveAnt(this, newPosition);
 			overrideBehavior = false;
 		} catch (OutOfBoundsException e) {
-			overrideBehavior = true;
-			if(e.getDirection() == OutOfBoundsException.Direction.Y_AXIS) {
-				rotation = (float)Math.toRadians(180.0) - rotation;
-				return;
-			}
-			if(e.getDirection() == OutOfBoundsException.Direction.X_AXIS) {
-				rotation = -rotation;
-				return;
-			}
+			dodgeBounds(e.getDirection());
 		} catch (PathIsBlockedException e) {
 			// movement is prohibited
 		}
     }
     
+	private void dodgeBounds(Direction direction) {
+		overrideBehavior = true;
+		if(direction == OutOfBoundsException.Direction.Y_AXIS) {
+			rotation = (float)Math.toRadians(180.0) - rotation;
+			return;
+		}
+		if(direction == OutOfBoundsException.Direction.X_AXIS) {
+			rotation = -rotation;
+			return;
+		}
+	}
+
 	private void turn(float delta) {
 		rotation += delta;
 	}
@@ -167,7 +205,9 @@ public class Ant implements SceneObject, Obstacle {
         antFarm.endShape();
         
         if(carriesFood) {
-        	// TODO draw some food
+        	antFarm.stroke(Food.outlineColor);
+        	antFarm.fill(Food.color);
+        	antFarm.ellipse(0, -SIZE, 4, 4);
         }
 
         antFarm.rotate(-rotation);

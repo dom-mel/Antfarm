@@ -23,7 +23,8 @@ public class AntFarm extends PApplet {
 //            Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
-    public final static float BORDER_SPANW_DISTANCE = 10;
+    public static final float BORDER_SPANW_DISTANCE = 10;
+    public static final int FOOD_COUNT = 5;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -44,7 +45,9 @@ public class AntFarm extends PApplet {
         for (final int HIVE_COLOR : HIVE_COLORS) {
             staticSceneObjects.add(new Hive(this, HIVE_COLOR));
         }
-        staticSceneObjects.add(new Food(this));
+        for(int i=0; i<FOOD_COUNT; i++) {
+        	staticSceneObjects.add(new Food(this));
+        }
         overlay = new Overlay(this);
     }
 
@@ -201,5 +204,18 @@ public class AntFarm extends PApplet {
         }
         return position;
     }
+
+	public Food getFoodInProximity(Ant ant) {
+		for(Object o : staticSceneObjects) {
+			if(o instanceof Food) {
+				Food food = (Food)o;
+				double distance = Math.abs(PVector.dist(ant.getPosition(), food.getPosition()));
+				if(distance < 30.0) {
+					return food;
+				}
+			}
+		}
+		return null;
+	}
 
 }
