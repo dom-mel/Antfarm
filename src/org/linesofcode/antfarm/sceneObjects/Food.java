@@ -19,7 +19,7 @@ public class Food implements SceneObject {
 
     public Food(final AntFarm antFarm) {
         this.antFarm = antFarm;
-        count = (int) antFarm.random(MAX_COUNT * 0.2f, MAX_COUNT);
+        count = (int) antFarm.random(MAX_COUNT * 0.1f, MAX_COUNT);
         position = antFarm.calcStaticSpawnPosition(this, SIZE);
     }
 

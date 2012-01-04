@@ -1,12 +1,13 @@
 package org.linesofcode.antfarm.sceneObjects;
 
 import org.linesofcode.antfarm.AntFarm;
-import org.linesofcode.antfarm.OutOfBoundsException;
-import org.linesofcode.antfarm.OutOfBoundsException.Direction;
-import org.linesofcode.antfarm.PathIsBlockedException;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
 import org.linesofcode.antfarm.behavior.SteeringBehavior;
 import org.linesofcode.antfarm.behavior.WanderingBehavior;
+import org.linesofcode.antfarm.exception.OutOfBoundsException;
+import org.linesofcode.antfarm.exception.PathIsBlockedException;
+import org.linesofcode.antfarm.exception.OutOfBoundsException.Direction;
+
 import processing.core.PVector;
 
 import java.awt.Color;
@@ -17,8 +18,8 @@ public class Ant implements SceneObject, Obstacle {
     public static float MAX_IDLE_TIME = 5f;
     public static float VIEW_DISTANCE = 30f;
     public static float FIELD_OF_VIEW = 120f;
-    public static float MIN_TIME_TO_LIVE = 320f;
-    public static float MAX_TIME_TO_LIVE = 500f;
+    public static float MIN_TIME_TO_LIVE = 120f;
+    public static float MAX_TIME_TO_LIVE = 240f;
     public static float MOVEMENT_RATE = 30f;
     public static float MIN_WANDERING_TIME = 60f;
     public static float MAX_WANDERING_TIME = 90f;

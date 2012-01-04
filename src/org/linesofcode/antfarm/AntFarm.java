@@ -1,6 +1,9 @@
 package org.linesofcode.antfarm;
 
 import controlP5.Slider;
+
+import org.linesofcode.antfarm.exception.OutOfBoundsException;
+import org.linesofcode.antfarm.exception.PathIsBlockedException;
 import org.linesofcode.antfarm.sceneObjects.*;
 
 import processing.core.PApplet;
@@ -15,7 +18,7 @@ public class AntFarm extends PApplet {
 
     private static final int[] HIVE_COLORS = {
             Color.BLUE.getRGB(),
-//            Color.RED.getRGB(),
+            Color.RED.getRGB(),
 //            Color.YELLOW.getRGB(),
 //            Color.PINK.getRGB(),
 //            Color.MAGENTA.getRGB(),
@@ -24,7 +27,7 @@ public class AntFarm extends PApplet {
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
     public static final float BORDER_SPANW_DISTANCE = 10;
-    public static final int FOOD_COUNT = 5;
+    public static final int FOOD_COUNT = 2;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -37,6 +40,7 @@ public class AntFarm extends PApplet {
     private Slider speed;
 
 	private boolean drawViewDirection = false;
+	private int currentFoodCount = 0;
 
     @Override
     public void setup() {
@@ -47,6 +51,7 @@ public class AntFarm extends PApplet {
         }
         for(int i=0; i<FOOD_COUNT; i++) {
         	staticSceneObjects.add(new Food(this));
+        	currentFoodCount++;
         }
         overlay = new Overlay(this);
     }
@@ -115,11 +120,15 @@ public class AntFarm extends PApplet {
 
     private void spawnFood() {
         addObjects.add(new Food(this));
+        currentFoodCount++;
     }
 
     public void removeFood(final Food food) {
         removeObjects.add(food);
-        spawnFood();
+        currentFoodCount--;
+        if(currentFoodCount < FOOD_COUNT) {
+        	spawnFood();
+        }
     }
 
     public void removeHive(final Hive hive) {
@@ -136,25 +145,27 @@ public class AntFarm extends PApplet {
 	}
 
     public boolean isPathBlocked(final Ant me, final PVector translation) {
-        final BoundingBox myBox = me.getBoundingBox();
-        if (myBox == null) {
-            return false;
-        }
-        final BoundingBox box = myBox.getTransformedBoundingBox(translation, me.getRotation());
-        for (final Ant ant : ants) {
-            if (ant == me) {
-                continue;
-            }
-
-            if (ant.getBoundingBox() == null) {
-                continue;
-            }
-
-            if (ant.getBoundingBox().intersects(box)) {
-                return true;
-            }
-        }
-        return false;
+    	return false;
+    	// FIXME collision temporarily deactivated
+//        final BoundingBox myBox = me.getBoundingBox();
+//        if (myBox == null) {
+//            return false;
+//        }
+//        final BoundingBox box = myBox.getTransformedBoundingBox(translation, me.getRotation());
+//        for (final Ant ant : ants) {
+//            if (ant == me) {
+//                continue;
+//            }
+//
+//            if (ant.getBoundingBox() == null) {
+//                continue;
+//            }
+//
+//            if (ant.getBoundingBox().intersects(box)) {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     public void moveAnt(final Ant ant, final PVector newPosition) throws OutOfBoundsException, PathIsBlockedException {
@@ -210,6 +221,7 @@ public class AntFarm extends PApplet {
 			if(o instanceof Food) {
 				Food food = (Food)o;
 				double distance = Math.abs(PVector.dist(ant.getPosition(), food.getPosition()));
+				distance -= food.getRelativeSize();
 				if(distance < 30.0) {
 					return food;
 				}

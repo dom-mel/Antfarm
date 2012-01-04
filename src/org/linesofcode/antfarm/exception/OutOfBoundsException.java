@@ -1,4 +1,4 @@
-package org.linesofcode.antfarm;
+package org.linesofcode.antfarm.exception;
 
 @SuppressWarnings("serial")
 public class OutOfBoundsException extends Exception {

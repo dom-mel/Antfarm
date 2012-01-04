@@ -9,8 +9,8 @@ public class Hive implements SceneObject {
     public final static float SIZE = 10;
     private static final float SPAWN_NOISE = 0.5f;
 
-    private long foodCount;
-    private float spawnSpeed = 5;
+    private long foodCount = 5;
+    private float spawnSpeed = 5f;
     private int ants;
 
     private PVector position;
@@ -31,13 +31,15 @@ public class Hive implements SceneObject {
     public void update(final float delta) {
         lastSpawn += delta;
         if (lastSpawn > spawnSpeed) {
-            antFarm.spawnAnt(this);
-            lastSpawn = - antFarm.random(1, SIZE * SPAWN_NOISE);
+        	if(foodCount > 0) {
+        		antFarm.spawnAnt(this);
+        		decreaseFood();
+        		lastSpawn = - antFarm.random(1, SIZE * SPAWN_NOISE);
+        	}
         }
-
     }
 
-    public void draw() {
+	public void draw() {
         antFarm.stroke(outlineColor);
         antFarm.fill(color);
         antFarm.rect(position.x, position.y, SIZE, SIZE);
@@ -52,8 +54,16 @@ public class Hive implements SceneObject {
     }
     
     public void putFood() {
-    	foodCount++;
+    	increaseFood();
     }
+    
+    private void increaseFood() {
+		foodCount++;
+	}
+
+	private void decreaseFood() {
+		foodCount--;
+	}
     
     public void pickUpAnt() {
     	ants++;
