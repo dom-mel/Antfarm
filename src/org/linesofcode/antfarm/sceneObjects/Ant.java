@@ -70,7 +70,7 @@ public class Ant implements SceneObject, Obstacle {
         	return;
         }
         case WANDERING: {
-        	// TODO check food / trail found
+        	// TODO trail found
         	wanderingTime += delta;
         	if(wanderingTime >= maxWanderingTime) {
         		returnHome();
