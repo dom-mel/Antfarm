@@ -266,7 +266,7 @@ public class Ant implements SceneObject, Obstacle {
     	state = AntState.IDLE;
     }
 
-    private void die() {
+    public void die() {
     	visible = false;
     	antFarm.removeAnt(this);
     }

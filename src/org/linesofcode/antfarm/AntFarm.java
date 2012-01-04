@@ -145,38 +145,59 @@ public class AntFarm extends PApplet {
 	}
 
     public boolean isPathBlocked(final Ant me, final PVector translation) {
-    	return false;
-    	// FIXME collision temporarily deactivated
-//        final BoundingBox myBox = me.getBoundingBox();
-//        if (myBox == null) {
-//            return false;
-//        }
-//        final BoundingBox box = myBox.getTransformedBoundingBox(translation, me.getRotation());
-//        for (final Ant ant : ants) {
-//            if (ant == me) {
-//                continue;
-//            }
-//
-//            if (ant.getBoundingBox() == null) {
-//                continue;
-//            }
-//
-//            if (ant.getBoundingBox().intersects(box)) {
-//                return true;
-//            }
-//        }
-//        return false;
+        return false;
+    }
+
+    public Ant hitsEnemyAnt(final Ant me) {
+        final BoundingBox myBox = me.getBoundingBox();
+        if (myBox == null) {
+            return null;
+        }
+
+        final int team = me.getHive().getColor();
+
+        for (final Ant ant : ants) {
+            if (ant == me) {
+                continue;
+            }
+
+            if (ant.getHive().getColor() == team) {
+                continue; // not an enemy
+            }
+
+            if (ant.getBoundingBox() == null) {
+                continue;
+            }
+
+            if (ant.getBoundingBox().intersects(myBox)) {
+                return ant;
+            }
+        }
+        return null;
     }
 
     public void moveAnt(final Ant ant, final PVector newPosition) throws OutOfBoundsException, PathIsBlockedException {
        
     	assertAntInBounds(newPosition);
-    	
+
+        final Ant enemy = hitsEnemyAnt(ant);
+        if (enemy != null) {
+            antFight(ant, enemy);
+        }
+
     	if (isPathBlocked(ant, newPosition)) {
             throw new PathIsBlockedException();
         }
-        
+
         ant.setPosition(newPosition);
+    }
+
+    public void antFight(final Ant me, final Ant enemy) {
+        if (random(1) < .5f) {
+            enemy.die();
+        } else {
+            me.die();
+        }
     }
 
     private void assertAntInBounds(PVector newPosition) throws OutOfBoundsException {
