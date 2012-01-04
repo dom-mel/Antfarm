@@ -216,8 +216,7 @@ public class Ant implements SceneObject, Obstacle {
     }
 
 	private void putTrail() {
-		// TODO put a trail
-		
+		antFarm.putPheromone(this);
 	}
 
     private void pickupFood(Food food) {
