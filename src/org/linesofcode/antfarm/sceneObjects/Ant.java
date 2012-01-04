@@ -14,6 +14,7 @@ import java.awt.Color;
 
 public class Ant implements SceneObject, Obstacle {
 
+	public static float TRAIL_INTERVAL = .75f;
 	public static float SIZE = 2f;
     public static float MAX_IDLE_TIME = 5f;
     public static float VIEW_DISTANCE = 30f;
@@ -43,6 +44,7 @@ public class Ant implements SceneObject, Obstacle {
     private BoundingBox bounds;
 	private boolean overrideBehavior;
 	private Food foodTarget;
+	private float trailTime = 0;
 
     public Ant(AntFarm antFarm, Hive hive) {
         this.antFarm = antFarm;
@@ -96,7 +98,11 @@ public class Ant implements SceneObject, Obstacle {
         		break;
         	}
         	if(carriesFood) {
-        		putTrail();
+        		trailTime -= delta;
+        		if(trailTime <= 0) {
+        			putTrail();
+        			trailTime = TRAIL_INTERVAL;
+        		}
         	}
         	break;
         }
