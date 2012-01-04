@@ -7,8 +7,8 @@ import java.awt.Color;
 
 public class Food implements SceneObject {
 	
-	private static int MAX_COUNT = 1000;
-	private static int SIZE = 10;
+	private static int MAX_COUNT = 20;
+	private static int SIZE = 20;
 	public static int outlineColor = Color.BLACK.getRGB();
 	public static int color = Color.GREEN.getRGB();
 
@@ -19,7 +19,7 @@ public class Food implements SceneObject {
 
     public Food(final AntFarm antFarm) {
         this.antFarm = antFarm;
-        count = (int) antFarm.random(MAX_COUNT * 0.90f, MAX_COUNT);
+        count = (int) antFarm.random(MAX_COUNT * 0.2f, MAX_COUNT);
         position = antFarm.calcStaticSpawnPosition(this, SIZE);
     }
 
