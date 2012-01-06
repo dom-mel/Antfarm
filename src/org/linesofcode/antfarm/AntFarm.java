@@ -31,9 +31,9 @@ public class AntFarm extends PApplet {
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
     public static final float BORDER_SPANW_DISTANCE = 10;
-    public static final int FOOD_COUNT = 2;
+    public static int FOOD_COUNT = 2;
 
-    public static float timeLapse = 1f;
+    public static float TIME_LAPSE = 1f;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -44,9 +44,7 @@ public class AntFarm extends PApplet {
     private Overlay overlay;
     private PGraphics pheromones;
 
-    private Slider speed;
-
-	private boolean drawViewDirection = false;
+	public static boolean drawViewDirection = false;
 	private int currentFoodCount = 0;
 
     @Override
@@ -86,7 +84,7 @@ public class AntFarm extends PApplet {
     	
         overlay.update(delta);
         
-        delta *= timeLapse;
+        delta *= TIME_LAPSE;
         fadeOutPheromoneTrails(delta);
         for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
