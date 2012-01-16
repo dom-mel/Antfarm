@@ -8,7 +8,7 @@ public class Hive implements SceneObject {
 
     public static float SIZE = 10;
     public static final float SPAWN_NOISE = 0.5f;
-    public static final int INITIAL_FOOD_COUNT = 1;
+    public static final int INITIAL_FOOD_COUNT = 50;
 
     private long foodCount = INITIAL_FOOD_COUNT;
     private float spawnSpeed = 5f;

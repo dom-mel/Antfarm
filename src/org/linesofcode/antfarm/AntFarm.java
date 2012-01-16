@@ -23,10 +23,10 @@ public class AntFarm extends PApplet {
     private static final int[] HIVE_COLORS = {
             Color.BLUE.getRGB(),
             Color.RED.getRGB(),
-//            Color.YELLOW.getRGB(),
+            Color.YELLOW.getRGB(),
 //            Color.PINK.getRGB(),
 //            Color.MAGENTA.getRGB(),
-//            new Color(148, 56, 161).getRGB(),
+            new Color(148, 56, 161).getRGB(),
 //            Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
@@ -279,7 +279,7 @@ public class AntFarm extends PApplet {
                 if (alpha(pixel) == 0) {
                     continue;
                 }
-                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
+                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 5 * delta));
             }
         }
     }

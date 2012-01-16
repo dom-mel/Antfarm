@@ -43,15 +43,15 @@ public class Overlay {
 
         int col = 10;
 
-        final Slider timeLaps = controlP5.addSlider("Timelaps", 0.25f, 8, AntFarm.TIME_LAPSE, 10, col+=30, 100, 20);
-        timeLaps.moveTo(defaultTab);
-        timeLaps.addListener(new ControlListener() {
+        final Slider timeLapse = controlP5.addSlider("Time lapse", 0.25f, 8, AntFarm.TIME_LAPSE, 10, col+=30, 100, 20);
+        timeLapse.moveTo(defaultTab);
+        timeLapse.addListener(new ControlListener() {
             @Override
             public void controlEvent(final ControlEvent controlEvent) {
-                AntFarm.TIME_LAPSE = timeLaps.value();
+                AntFarm.TIME_LAPSE = timeLapse.value();
             }
         });
-        controlls.add(timeLaps);
+        controlls.add(timeLapse);
 
         final Slider foodCount = controlP5.addSlider("Food count", 0.25f, 8, AntFarm.FOOD_COUNT, 10, col+=30, 100, 20);
         foodCount.moveTo(defaultTab);
