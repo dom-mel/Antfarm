@@ -24,17 +24,17 @@ public class AntFarm extends PApplet {
     private static final int[] HIVE_COLORS = {
             Color.BLUE.getRGB(),
             Color.RED.getRGB(),
-//            Color.YELLOW.getRGB(),
+            Color.YELLOW.getRGB(),
 //            Color.PINK.getRGB(),
 //            Color.MAGENTA.getRGB(),
-//            new Color(148, 56, 161).getRGB(),
+            new Color(148, 56, 161).getRGB(),
 //            Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
     public static final float BORDER_SPANW_DISTANCE = 10;
-    public static final int FOOD_COUNT = 2;
+    public static int FOOD_COUNT = 2;
 
-    public static float timeLapse = 1f;
+    public static float TIME_LAPSE = 1f;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -45,9 +45,7 @@ public class AntFarm extends PApplet {
     private Overlay overlay;
     private PGraphics pheromones;
 
-    private Slider speed;
-
-	private boolean drawViewDirection = false;
+	public static boolean drawViewDirection = false;
 	private int currentFoodCount = 0;
 
     @Override
@@ -87,7 +85,7 @@ public class AntFarm extends PApplet {
     	
         overlay.update(delta);
         
-        delta *= timeLapse;
+        delta *= TIME_LAPSE;
         fadeOutPheromoneTrails(delta);
         for (final SceneObject sceneObject: staticSceneObjects) {
             if (removeObjects.contains(sceneObject)) {
@@ -279,20 +277,15 @@ public class AntFarm extends PApplet {
     }
 
     private void fadeOutPheromoneTrails(final float delta) {
-    	pheromones.beginDraw();
-    	pheromones.fill(Color.LIGHT_GRAY.getRGB());
-    	pheromones.alpha(0);
-    	pheromones.rect(0, 0, width, height);
-    	pheromones.endDraw();
-//        for (int w = 0; w < width; w++) {
-//            for (int h = 0; h < height; h++) {
-//                final int pixel = pheromones.get(w, h);
-//                if (alpha(pixel) == 0) {
-//                    continue;
-//                }
-//                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
-//            }
-//        }
+        for (int w = 0; w < width; w++) {
+            for (int h = 0; h < height; h++) {
+                final int pixel = pheromones.get(w, h);
+                if (alpha(pixel) == 0) {
+                    continue;
+                }
+                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
+            }
+        }
     }
 
 }

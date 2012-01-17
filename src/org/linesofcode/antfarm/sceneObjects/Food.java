@@ -7,8 +7,8 @@ import java.awt.Color;
 
 public class Food implements SceneObject {
 	
-	private static int MAX_COUNT = 20;
-	private static int SIZE = 20;
+	public static int MAX_COUNT = 20;
+	public static int SIZE = 20;
 	public static int outlineColor = Color.BLACK.getRGB();
 	public static int color = Color.GREEN.getRGB();
 

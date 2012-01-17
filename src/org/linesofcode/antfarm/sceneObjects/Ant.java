@@ -14,16 +14,20 @@ import java.awt.Color;
 
 public class Ant implements SceneObject, Obstacle {
 
-	public static float TRAIL_INTERVAL = .75f;
-	public static float SIZE = 2f;
-    public static float MAX_IDLE_TIME = 5f;
-    public static float VIEW_DISTANCE = 30f;
-    public static float FIELD_OF_VIEW = 120f;
-    public static float MIN_TIME_TO_LIVE = 120f;
+    public static float SIZE = 2f;
+
+    public static float TRAIL_INTERVAL = .75f;
+
     public static float MAX_TIME_TO_LIVE = 240f;
-    public static float MOVEMENT_RATE = 30f;
-    public static float MIN_WANDERING_TIME = 60f;
+    public static float MIN_TIME_TO_LIVE = 120f;
     public static float MAX_WANDERING_TIME = 90f;
+    public static float MIN_WANDERING_TIME = 60f;
+    public static float MAX_IDLE_TIME = 5f;
+
+    public static float MOVEMENT_RATE = 30f;
+    public static float VIEW_DISTANCE = 30f;
+
+    public static float FIELD_OF_VIEW = 120f;
 
     private final AntFarm antFarm;
     private final Hive hive;
