@@ -132,7 +132,7 @@ public class Ant implements SceneObject, Obstacle {
     private boolean isFoodClose(Food foodTarget) {
     	float dx = Math.abs(position.x - foodTarget.getPosition().x);
     	float dy = Math.abs(position.y - foodTarget.getPosition().y);
-		return dx <= (foodTarget.getRelativeSize() / 2) && dy <= (foodTarget.getRelativeSize() / 2);
+		return dx <= (Food.SIZE / 2) && dy <= (Food.SIZE / 2);
 	}
 
 	private void approachFood(Food food) {
@@ -208,6 +208,7 @@ public class Ant implements SceneObject, Obstacle {
         
         antFarm.stroke(color);
         antFarm.fill(color);
+        antFarm.strokeWeight(1f);
 
         antFarm.beginShape();
         antFarm.vertex(-SIZE, SIZE);
@@ -216,8 +217,8 @@ public class Ant implements SceneObject, Obstacle {
         antFarm.endShape();
         
         if(carriesFood) {
-        	antFarm.stroke(Food.outlineColor);
-        	antFarm.fill(Food.color);
+        	antFarm.stroke(Food.OUTLINE_COLOR);
+        	antFarm.fill(Food.COLOR);
         	antFarm.ellipse(0, -SIZE, 4, 4);
         }
 

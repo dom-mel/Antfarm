@@ -43,6 +43,7 @@ public class Hive implements SceneObject {
     }
 
 	public void draw() {
+		antFarm.strokeWeight(1f);
         antFarm.stroke(outlineColor);
         antFarm.fill(color);
         antFarm.rect(position.x, position.y, SIZE, SIZE);
