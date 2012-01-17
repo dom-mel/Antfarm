@@ -1,6 +1,5 @@
 package org.linesofcode.antfarm;
 
-import controlP5.Slider;
 import org.linesofcode.antfarm.exception.OutOfBoundsException;
 import org.linesofcode.antfarm.exception.PathIsBlockedException;
 import org.linesofcode.antfarm.sceneObjects.Ant;
@@ -11,7 +10,6 @@ import org.linesofcode.antfarm.sceneObjects.Overlay;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.Color;
@@ -22,13 +20,10 @@ import java.util.Set;
 public class AntFarm extends PApplet {
 
     private static final int[] HIVE_COLORS = {
-            Color.BLUE.getRGB(),
-            Color.RED.getRGB(),
-            Color.YELLOW.getRGB(),
-//            Color.PINK.getRGB(),
-//            Color.MAGENTA.getRGB(),
+            new Color(60, 60, 235).getRGB(),
+            new Color(255, 80, 0).getRGB(),
+            new Color(255, 220, 0).getRGB(),
             new Color(148, 56, 161).getRGB(),
-//            Color.WHITE.getRGB()
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
     public static final float BORDER_SPANW_DISTANCE = 10;
@@ -63,6 +58,8 @@ public class AntFarm extends PApplet {
 
         pheromones = createGraphics(width, height, P2D);
         pheromones.background(color(1,0));
+        
+        smooth();
     }
 
     @Override

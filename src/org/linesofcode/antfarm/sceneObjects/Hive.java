@@ -1,12 +1,14 @@
 package org.linesofcode.antfarm.sceneObjects;
 
+import java.awt.Color;
+
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
 
 public class Hive implements SceneObject {
 
-    public static float SIZE = 10;
+    public static float SIZE = 12;
     public static final float SPAWN_NOISE = 0.5f;
     public static final int INITIAL_FOOD_COUNT = 5;
 
@@ -26,6 +28,8 @@ public class Hive implements SceneObject {
     public Hive(final AntFarm antFarm, final int color) {
         this.antFarm = antFarm;
         this.color = color;
+        Color c = new Color(color);
+        outlineColor = c.darker().darker().darker().getRGB();
         position = antFarm.calcStaticSpawnPosition(this, SIZE);
         lastSpawn = Float.MAX_VALUE;
     }
@@ -43,10 +47,12 @@ public class Hive implements SceneObject {
     }
 
 	public void draw() {
-		antFarm.strokeWeight(1f);
-        antFarm.stroke(outlineColor);
-        antFarm.fill(color);
-        antFarm.rect(position.x, position.y, SIZE, SIZE);
+		antFarm.strokeWeight(4f);
+        antFarm.stroke(color);
+        antFarm.fill(0);
+        antFarm.translate(position.x, position.y);
+        antFarm.ellipse(0, 0, SIZE, SIZE);
+        antFarm.translate(-position.x, -position.y);
     }
 
     public int getColor() {

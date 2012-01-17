@@ -81,7 +81,7 @@ public class Overlay {
 
         int col = 10;
 
-        final Slider foodSize = controlP5.addSlider("Food Size", 10, 40, Food.SIZE, 10, col+=30, 100, 20);
+        final Slider foodSize = controlP5.addSlider("Food Size", 4, 40, Food.SIZE, 10, col+=30, 100, 20);
         foodSize.moveTo(staticTAb);
         foodSize.addListener(new ControlListener() {
             @Override

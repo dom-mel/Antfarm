@@ -8,7 +8,7 @@ import java.awt.Color;
 public class Food implements SceneObject {
 	
 	public static int MAX_COUNT = 20;
-	public static int SIZE = 20;
+	public static int SIZE = 4;
 	public static int OUTLINE_COLOR = new Color(0x0, 0xaa, 0x0).getRGB();
 	public static int COLOR = new Color(0x33, 0xee, 0x33).getRGB();
 
@@ -20,7 +20,7 @@ public class Food implements SceneObject {
     public Food(final AntFarm antFarm) {
         this.antFarm = antFarm;
         count = (int) antFarm.random(MAX_COUNT * 0.1f, MAX_COUNT);
-        position = antFarm.calcStaticSpawnPosition(this, SIZE);
+        position = antFarm.calcStaticSpawnPosition(this, 20);
     }
 
     public void draw() {
@@ -31,7 +31,7 @@ public class Food implements SceneObject {
         for(int i=0; i<count; i++) {
         	float dx = (float)Math.sin(i*10);
         	float dy = (float)Math.cos(i*10);
-        	antFarm.ellipse(position.x + dx*i, position.y + dy*i, 4, 4);
+        	antFarm.ellipse(position.x + dx*i, position.y + dy*i, SIZE, SIZE);
         }
     }
 

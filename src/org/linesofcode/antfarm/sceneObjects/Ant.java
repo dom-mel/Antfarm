@@ -219,7 +219,7 @@ public class Ant implements SceneObject, Obstacle {
         if(carriesFood) {
         	antFarm.stroke(Food.OUTLINE_COLOR);
         	antFarm.fill(Food.COLOR);
-        	antFarm.ellipse(0, -SIZE, 4, 4);
+        	antFarm.ellipse(0, -SIZE, Food.SIZE, Food.SIZE);
         }
 
         antFarm.rotate(-rotation);
