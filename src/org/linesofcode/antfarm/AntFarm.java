@@ -11,6 +11,7 @@ import org.linesofcode.antfarm.sceneObjects.Overlay;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.Color;
@@ -206,11 +207,15 @@ public class AntFarm extends PApplet {
         ant.setPosition(newPosition);
     }
 
-    public void antFight(final Ant me, final Ant enemy) {
-        if (random(1) < .5f) {
-            enemy.die();
+    public void antFight(final Ant a, final Ant b) {
+        float combatValueA = a.getRelativeStamina() + random(1f);
+        float combatValueB = b.getRelativeStamina() + random(1f);
+        if(combatValueA > combatValueB) {
+        	b.die();
+        } else if(combatValueB > combatValueA) {
+        	a.die();
         } else {
-            me.die();
+        	antFight(a, b);
         }
     }
 
@@ -274,16 +279,20 @@ public class AntFarm extends PApplet {
     }
 
     private void fadeOutPheromoneTrails(final float delta) {
-
-        for (int w = 0; w < width; w++) {
-            for (int h = 0; h < height; h++) {
-                final int pixel = pheromones.get(w, h);
-                if (alpha(pixel) == 0) {
-                    continue;
-                }
-                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
-            }
-        }
+    	pheromones.beginDraw();
+    	pheromones.fill(Color.LIGHT_GRAY.getRGB());
+    	pheromones.alpha(0);
+    	pheromones.rect(0, 0, width, height);
+    	pheromones.endDraw();
+//        for (int w = 0; w < width; w++) {
+//            for (int h = 0; h < height; h++) {
+//                final int pixel = pheromones.get(w, h);
+//                if (alpha(pixel) == 0) {
+//                    continue;
+//                }
+//                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
+//            }
+//        }
     }
 
 }

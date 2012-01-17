@@ -313,4 +313,8 @@ public class Ant implements SceneObject, Obstacle {
 	public float getRotation() {
         return rotation;
     }
+	
+	public float getRelativeStamina() {
+		return wanderingTime / maxWanderingTime;
+	}
 }
