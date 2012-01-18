@@ -280,7 +280,7 @@ public class AntFarm extends PApplet {
 
     public void putPheromone(final Ant me) {
         pheromones.fill(me.getHive().getColor());
-        pheromones.rect(me.getPosition().x-1, me.getPosition().y-1, 3,3);
+        pheromones.ellipse(me.getPosition().x-2, me.getPosition().y-2, 5,5);
     }
 
     public PVector getClosePheromoneTrail(final Ant me) {
