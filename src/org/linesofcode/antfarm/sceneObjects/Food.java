@@ -31,7 +31,7 @@ public class Food implements SceneObject {
         for(int i=0; i<count; i++) {
         	float dx = (float)Math.sin(i*10);
         	float dy = (float)Math.cos(i*10);
-        	antFarm.ellipse(position.x + dx*i, position.y + dy*i, SIZE, SIZE);
+        	antFarm.ellipse(position.x + dx*(float)Math.log(i*15), position.y + dy*(float)Math.log(i*15), SIZE, SIZE);
         }
     }
 

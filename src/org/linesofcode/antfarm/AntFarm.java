@@ -65,7 +65,7 @@ public class AntFarm extends PApplet {
     @Override
     public void draw() {
         update(1 / frameRate);
-        background(Color.DARK_GRAY.getRGB());
+        background(155);
 
         image(pheromones, 0, 0);
 
