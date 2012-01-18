@@ -269,7 +269,7 @@ public class AntFarm extends PApplet {
 			if(o instanceof Food) {
 				Food food = (Food)o;
 				double distance = Math.abs(PVector.dist(ant.getPosition(), food.getPosition()));
-				distance -= food.getRelativeSize();
+				distance -= Food.SIZE;
 				if(distance < 30.0) {
 					return food;
 				}

@@ -15,7 +15,6 @@ public class Food implements SceneObject {
     private int count;
     private PVector position;
     private final AntFarm antFarm;
-    private float relativeSize;
 
     public Food(final AntFarm antFarm) {
         this.antFarm = antFarm;
@@ -28,7 +27,7 @@ public class Food implements SceneObject {
         antFarm.fill(COLOR);
         antFarm.strokeWeight(1f);
         
-        for(int i=0; i<count; i++) {
+        for(int i=count; i>0; i--) {
         	float dx = (float)Math.sin(i*10);
         	float dy = (float)Math.cos(i*10);
         	antFarm.ellipse(position.x + dx*(float)Math.log(i*15*SIZE), position.y + dy*(float)Math.log(i*15*SIZE), SIZE, SIZE);
@@ -52,9 +51,5 @@ public class Food implements SceneObject {
 
     public PVector getPosition() {
         return position;
-    }
-    
-    public float getRelativeSize() {
-    	return relativeSize;
     }
 }

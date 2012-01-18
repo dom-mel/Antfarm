@@ -132,7 +132,7 @@ public class Ant implements SceneObject, Obstacle {
     private boolean isFoodClose(Food foodTarget) {
     	float dx = Math.abs(position.x - foodTarget.getPosition().x);
     	float dy = Math.abs(position.y - foodTarget.getPosition().y);
-		return dx <= (Food.SIZE / 2) && dy <= (Food.SIZE / 2);
+		return dx <= Food.SIZE/2 && dy <= Food.SIZE/2;
 	}
 
 	private void approachFood(Food food) {
