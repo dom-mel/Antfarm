@@ -65,7 +65,7 @@ public class AntFarm extends PApplet {
     @Override
     public void draw() {
         update(1 / frameRate);
-        background(Color.LIGHT_GRAY.getRGB());
+        background(Color.DARK_GRAY.getRGB());
 
         image(pheromones, 0, 0);
 
@@ -266,7 +266,8 @@ public class AntFarm extends PApplet {
 	}
 
     public void putPheromone(final Ant me) {
-        pheromones.set((int) me.getPosition().x, (int) me.getPosition().y, me.getHive().getColor());
+        pheromones.fill(me.getHive().getColor());
+        pheromones.rect(me.getPosition().x-1, me.getPosition().y-1, 3,3);
     }
 
     public PVector getClosePheromoneTrail(final Ant me) {
