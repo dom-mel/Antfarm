@@ -10,6 +10,7 @@ import org.linesofcode.antfarm.sceneObjects.Overlay;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.Color;
@@ -39,12 +40,17 @@ public class AntFarm extends PApplet {
 
     private Overlay overlay;
     private PGraphics pheromones;
+    
+    private PImage bgTexture;
 
 	public static boolean drawViewDirection = false;
 	private int currentFoodCount = 0;
 
     @Override
     public void setup() {
+    	
+    	bgTexture = loadImage("assets/grass.jpg");
+    	
         size(600, 400);
 
         for (final int HIVE_COLOR : HIVE_COLORS) {
@@ -66,6 +72,7 @@ public class AntFarm extends PApplet {
     public void draw() {
         update(1 / frameRate);
         background(155);
+        image(bgTexture, 0, 0, 600, 400);
 
         image(pheromones, 0, 0);
 

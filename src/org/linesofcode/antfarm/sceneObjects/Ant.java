@@ -14,7 +14,7 @@ import java.awt.Color;
 
 public class Ant implements SceneObject, Obstacle {
 
-    public static float SIZE = 2f;
+    public static float SIZE = 4f;
 
     public static float TRAIL_INTERVAL = .75f;
 
@@ -206,7 +206,7 @@ public class Ant implements SceneObject, Obstacle {
         	antFarm.line(0, 0, 0, -4f * SIZE);
     	}
         
-        antFarm.stroke(color);
+        antFarm.stroke(0);
         antFarm.fill(color);
         antFarm.strokeWeight(1f);
 

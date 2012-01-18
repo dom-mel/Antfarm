@@ -8,9 +8,9 @@ import java.awt.Color;
 public class Food implements SceneObject {
 	
 	public static int MAX_COUNT = 20;
-	public static int SIZE = 4;
-	public static int OUTLINE_COLOR = new Color(0x0, 0xaa, 0x0).getRGB();
-	public static int COLOR = new Color(0x33, 0xee, 0x33).getRGB();
+	public static int SIZE = 8;
+	public static int OUTLINE_COLOR = new Color(0x0, 0x55, 0x0).getRGB();
+	public static int COLOR = new Color(0x99, 0xff, 0x99).getRGB();
 
     private int count;
     private PVector position;
@@ -31,7 +31,7 @@ public class Food implements SceneObject {
         for(int i=0; i<count; i++) {
         	float dx = (float)Math.sin(i*10);
         	float dy = (float)Math.cos(i*10);
-        	antFarm.ellipse(position.x + dx*(float)Math.log(i*15), position.y + dy*(float)Math.log(i*15), SIZE, SIZE);
+        	antFarm.ellipse(position.x + dx*(float)Math.log(i*15*SIZE), position.y + dy*(float)Math.log(i*15*SIZE), SIZE, SIZE);
         }
     }
 
