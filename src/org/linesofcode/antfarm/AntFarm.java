@@ -49,7 +49,7 @@ public class AntFarm extends PApplet {
     @Override
     public void setup() {
     	
-    	bgTexture = loadImage("assets/grass.jpg");
+    	loadAssets();
     	
         size(600, 400);
 
@@ -68,7 +68,13 @@ public class AntFarm extends PApplet {
         smooth();
     }
 
-    @Override
+    private void loadAssets() {
+    	Class<?> c = getClass();
+    	String path = c.getResource("/assets/grass.jpg").getFile();
+    	bgTexture = loadImage(path);
+	}
+
+	@Override
     public void draw() {
         update(1 / frameRate);
         background(155);
