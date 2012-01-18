@@ -70,7 +70,7 @@ public class AntFarm extends PApplet {
 
     private void loadAssets() {
     	Class<?> c = getClass();
-    	String path = c.getResource("/assets/grass.jpg").getFile();
+    	String path = c.getResource("/assets/grass2.jpg").getFile();
     	bgTexture = loadImage(path);
 	}
 
