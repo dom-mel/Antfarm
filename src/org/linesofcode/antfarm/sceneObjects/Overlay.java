@@ -76,13 +76,13 @@ public class Overlay {
 
     private void setupStatic() {
 // controlP5.addSlider(name, min, max, defaultValue, x, y, width, heigth)
-        Tab staticTAb = controlP5.tab("Static Objects");
-        staticTAb.setLabel("Static Objects");
+        Tab staticTab = controlP5.tab("Static Objects");
+        staticTab.setLabel("Static Objects");
 
         int col = 10;
 
         final Slider foodSize = controlP5.addSlider("Food Size", 4, 40, Food.SIZE, 10, col+=30, 100, 20);
-        foodSize.moveTo(staticTAb);
+        foodSize.moveTo(staticTab);
         foodSize.addListener(new ControlListener() {
             @Override
             public void controlEvent(final ControlEvent controlEvent) {
@@ -92,7 +92,7 @@ public class Overlay {
         controlls.add(foodSize);
 
         final Slider maxFoodCount = controlP5.addSlider("Max food Count", 1, 50, Food.MAX_COUNT, 10, col+=30, 100, 20);
-        maxFoodCount.moveTo(staticTAb);
+        maxFoodCount.moveTo(staticTab);
         maxFoodCount.addListener(new ControlListener() {
             @Override
             public void controlEvent(final ControlEvent controlEvent) {
@@ -102,7 +102,7 @@ public class Overlay {
         controlls.add(maxFoodCount);
 
         final Slider hiveSize = controlP5.addSlider("Hive Size", 5, 30, Hive.SIZE, 10, col+=30, 100, 20);
-        hiveSize.moveTo(staticTAb);
+        hiveSize.moveTo(staticTab);
         hiveSize.addListener(new ControlListener() {
             @Override
             public void controlEvent(final ControlEvent controlEvent) {
@@ -110,6 +110,16 @@ public class Overlay {
             }
         });
         controlls.add(hiveSize);
+
+        final Slider pheromoneSize = controlP5.addSlider("Pheromone trail size", 3, 10, AntFarm.PHEROMONE_SIZE, 10, col+=30, 100, 20);
+        pheromoneSize.moveTo(staticTab);
+        pheromoneSize.addListener(new ControlListener() {
+            @Override
+            public void controlEvent(final ControlEvent controlEvent) {
+                AntFarm.PHEROMONE_SIZE = pheromoneSize.value();
+            }
+        });
+        controlls.add(pheromoneSize);
     }
 
     private void setupAntTab() {

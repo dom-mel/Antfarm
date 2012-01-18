@@ -29,8 +29,8 @@ public class AntFarm extends PApplet {
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
     public static final float BORDER_SPANW_DISTANCE = 10;
     public static int FOOD_COUNT = 2;
-
     public static float TIME_LAPSE = 1f;
+    public static float PHEROMONE_SIZE = 5f;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -280,7 +280,7 @@ public class AntFarm extends PApplet {
 
     public void putPheromone(final Ant me) {
         pheromones.fill(me.getHive().getColor());
-        pheromones.ellipse(me.getPosition().x-2, me.getPosition().y-2, 5,5);
+        pheromones.ellipse(me.getPosition().x-(PHEROMONE_SIZE/2), me.getPosition().y-(PHEROMONE_SIZE/2), PHEROMONE_SIZE, PHEROMONE_SIZE);
     }
 
     public PVector getClosePheromoneTrail(final Ant me) {
@@ -294,7 +294,7 @@ public class AntFarm extends PApplet {
                 if (alpha(pixel) == 0) {
                     continue;
                 }
-                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 50 * delta));
+                pheromones.set(w, h,color(red(pixel), green(pixel), blue(pixel), alpha(pixel) - 10 * delta));
             }
         }
     }
