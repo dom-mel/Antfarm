@@ -201,6 +201,7 @@ public class Ant implements SceneObject, Obstacle {
     	antFarm.translate(position.x, position.y);
         antFarm.rotate(rotation);
         
+        antFarm.strokeWeight(1f);
         if(antFarm.isDrawViewDirectionEnabled()) {
         	antFarm.stroke(Color.RED.getRGB());
         	antFarm.line(0, 0, 0, -4f * SIZE);
@@ -208,7 +209,6 @@ public class Ant implements SceneObject, Obstacle {
         
         antFarm.stroke(0);
         antFarm.fill(color);
-        antFarm.strokeWeight(1f);
 
         antFarm.beginShape();
         antFarm.vertex(-SIZE, SIZE);
