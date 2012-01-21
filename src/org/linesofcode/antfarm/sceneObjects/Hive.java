@@ -1,7 +1,5 @@
 package org.linesofcode.antfarm.sceneObjects;
 
-import java.awt.Color;
-
 import org.linesofcode.antfarm.AntFarm;
 
 import processing.core.PVector;
@@ -19,7 +17,6 @@ public class Hive implements SceneObject {
 
     private PVector position;
     private int color;
-    private int outlineColor = 0;
 
     private float lastSpawn;
 
@@ -28,8 +25,6 @@ public class Hive implements SceneObject {
     public Hive(final AntFarm antFarm, final int color) {
         this.antFarm = antFarm;
         this.color = color;
-        Color c = new Color(color);
-        outlineColor = c.darker().darker().darker().getRGB();
         position = antFarm.calcStaticSpawnPosition(this, SIZE);
         lastSpawn = Float.MAX_VALUE;
     }

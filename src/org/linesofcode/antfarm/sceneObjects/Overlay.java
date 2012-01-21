@@ -18,8 +18,7 @@ public class Overlay {
     private final ControlP5 controlP5;
     private final AntFarm antFarm;
 
-    private final Set<Controller> controlls;
-    private final Set<Tab> tabs;
+    private final Set<Controller> controlls = new HashSet<Controller>();
     private float block;
 
     private boolean visible;
@@ -27,8 +26,6 @@ public class Overlay {
     public Overlay(final AntFarm antFarm) {
         this.antFarm = antFarm;
         controlP5 = new ControlP5(antFarm);
-        controlls = new HashSet<Controller> ();
-        tabs = new HashSet<Tab>();
         visible = false;
         block = 0;
         setupGeneral();
