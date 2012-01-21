@@ -196,7 +196,7 @@ public class Overlay {
         });
         controlls.add(antIdle);
 
-        final Slider antMovementRate = controlP5.addSlider("Movement Rate", 20, 50, Ant.MOVEMENT_RATE, 10, col1+=30, 100, 20);
+        final Slider antMovementRate = controlP5.addSlider("Movement Rate", 10, 100, Ant.MOVEMENT_RATE, 10, col1+=30, 100, 20);
         antMovementRate.moveTo(antTab);
         antMovementRate.addListener(new ControlListener() {
             @Override

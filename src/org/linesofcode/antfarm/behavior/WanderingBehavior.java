@@ -5,7 +5,7 @@ import java.util.Random;
 public class WanderingBehavior implements SteeringBehavior {
 	
 	public static int UPDATES_PER_SECOND = 25;
-	public static float MAX_ANGLE = 10f;
+	public static float MAX_ANGLE = 15f;
 	public static float MIN_ANGLE = 0f;
 	
 	private float timeSinceLastUpdate = 0f;

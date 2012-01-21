@@ -26,9 +26,7 @@ public class Ant implements SceneObject, Obstacle {
     public static float MAX_WANDERING_TIME = 90f;
     public static float MIN_WANDERING_TIME = 60f;
     public static float MAX_IDLE_TIME = 5f;
-    public static float MOVEMENT_RATE = 30f;
-    public static float VIEW_DISTANCE = 30f;
-    public static float FIELD_OF_VIEW = 120f;
+    public static float MOVEMENT_RATE = 50f;
 
     private final AntFarm antFarm;
     private final Hive hive;
