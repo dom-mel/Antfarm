@@ -1,4 +1,4 @@
-package org.linesofcode.antfarm.sceneObjects;
+package org.linesofcode.antfarm.sceneObjects.ant;
 
 import org.linesofcode.antfarm.AntFarm;
 import org.linesofcode.antfarm.behavior.SeekBehavior;
@@ -7,6 +7,11 @@ import org.linesofcode.antfarm.behavior.WanderingBehavior;
 import org.linesofcode.antfarm.exception.OutOfBoundsException;
 import org.linesofcode.antfarm.exception.PathIsBlockedException;
 import org.linesofcode.antfarm.exception.OutOfBoundsException.Direction;
+import org.linesofcode.antfarm.sceneObjects.BoundingBox;
+import org.linesofcode.antfarm.sceneObjects.Food;
+import org.linesofcode.antfarm.sceneObjects.Hive;
+import org.linesofcode.antfarm.sceneObjects.Obstacle;
+import org.linesofcode.antfarm.sceneObjects.SceneObject;
 
 import processing.core.PVector;
 
@@ -15,18 +20,14 @@ import java.awt.Color;
 public class Ant implements SceneObject, Obstacle {
 
     public static float SIZE = 4f;
-
     public static float TRAIL_INTERVAL = .75f;
-
     public static float MAX_TIME_TO_LIVE = 240f;
     public static float MIN_TIME_TO_LIVE = 120f;
     public static float MAX_WANDERING_TIME = 90f;
     public static float MIN_WANDERING_TIME = 60f;
     public static float MAX_IDLE_TIME = 5f;
-
     public static float MOVEMENT_RATE = 30f;
     public static float VIEW_DISTANCE = 30f;
-
     public static float FIELD_OF_VIEW = 120f;
 
     private final AntFarm antFarm;
@@ -36,19 +37,13 @@ public class Ant implements SceneObject, Obstacle {
     private boolean visible = false;
     private int color;
     private float rotation = 0f;
-    
     private AntState state;
     private boolean carriesFood;
     private float timeToLive;
     private float speedMultiplier;
-    private float idleTime;
-    private float wanderingTime;
-    private float maxWanderingTime;
     private SteeringBehavior behavior;
     private BoundingBox bounds;
 	private boolean overrideBehavior;
-	private Food foodTarget;
-	private float trailTime = 0;
 
     public Ant(AntFarm antFarm, Hive hive) {
         this.antFarm = antFarm;
@@ -67,57 +62,9 @@ public class Ant implements SceneObject, Obstacle {
     		return;
     	}
     	
-        switch(state) {
-        case IDLE: {
-        	idleTime += delta;
-        	if(idleTime >= MAX_IDLE_TIME) {
-        		leaveHive();
-        	}
+        state.update(delta);
+        if(state instanceof IdleState) {
         	return;
-        }
-        case WANDERING: {
-        	// TODO trail found
-        	wanderingTime += delta;
-        	if(wanderingTime >= maxWanderingTime) {
-        		returnHome();
-        		break;
-        	}
-        	Food food = antFarm.getFoodInProximity(this);
-        	if(food != null) {
-        		approachFood(food);
-        	}
-        	break;
-        }
-        case APPROACHING_FOOD: {
-        	if(isFoodClose(foodTarget)) {
-        		pickupFood(foodTarget);
-        		foodTarget = null;
-        		returnHome();
-        	}
-        	break;
-        }
-        case RETURNING_HOME: {
-        	if(isNearHive()) {
-        		enterHive();
-        		break;
-        	}
-        	if(carriesFood) {
-        		trailTime -= delta;
-        		if(trailTime <= 0) {
-        			putTrail();
-        			trailTime = TRAIL_INTERVAL;
-        		}
-        	}
-        	break;
-        }
-        case FOLLOWING_TRAIL: {
-        	// TODO check for trail
-        	// TODO if no trail, wander
-        	break;
-        }
-        default: {
-        	throw new RuntimeException("Unrecognized ant state");
-        }
         }
         
         behavior.update(delta);
@@ -129,19 +76,18 @@ public class Ant implements SceneObject, Obstacle {
         bounds = new BoundingBox(position, rotation, new PVector(-SIZE, SIZE), new PVector(0, -SIZE), new PVector(SIZE, SIZE));
     }
 
-    private boolean isFoodClose(Food foodTarget) {
+    boolean isFoodClose(Food foodTarget) {
     	float dx = Math.abs(position.x - foodTarget.getPosition().x);
     	float dy = Math.abs(position.y - foodTarget.getPosition().y);
 		return dx <= Food.SIZE/2 && dy <= Food.SIZE/2;
 	}
 
-	private void approachFood(Food food) {
-		foodTarget = food;
-		state = AntState.APPROACHING_FOOD;
+	void approachFood(Food food) {
+		state = new ApproachingFoodState(this, food);
 		behavior = new SeekBehavior(food.getPosition(), this);
 	}
 
-	private boolean isNearHive() {
+	boolean isNearHive() {
     	float dx = Math.abs(position.x - hive.getCenter().x);
     	float dy = Math.abs(position.y - hive.getCenter().y);
 		return dx <= (Hive.SIZE / 2) && dy <= (Hive.SIZE / 2);
@@ -201,7 +147,15 @@ public class Ant implements SceneObject, Obstacle {
     	antFarm.translate(position.x, position.y);
         antFarm.rotate(rotation);
         
-        antFarm.strokeWeight(1f);
+        state.draw();
+
+        antFarm.rotate(-rotation);
+        antFarm.translate(-position.x, -position.y);
+    }
+	
+	void drawAnt() {
+		
+		antFarm.strokeWeight(1f);
         if(antFarm.isDrawViewDirectionEnabled()) {
         	antFarm.stroke(Color.RED.getRGB());
         	antFarm.line(0, 0, 0, -4f * SIZE);
@@ -215,27 +169,24 @@ public class Ant implements SceneObject, Obstacle {
         antFarm.vertex(0, -SIZE);
         antFarm.vertex(SIZE, SIZE);
         antFarm.endShape();
-        
-        if(carriesFood) {
-        	antFarm.stroke(Food.OUTLINE_COLOR);
-        	antFarm.fill(Food.COLOR);
-        	antFarm.ellipse(0, -SIZE, Food.SIZE, Food.SIZE);
-        }
+	}
+	
+	void drawCarriedFood() {
+		antFarm.stroke(Food.OUTLINE_COLOR);
+    	antFarm.fill(Food.COLOR);
+    	antFarm.ellipse(0, -SIZE, Food.SIZE, Food.SIZE);
+	}
 
-        antFarm.rotate(-rotation);
-        antFarm.translate(-position.x, -position.y);
-    }
-
-	private void putTrail() {
+	void putTrail() {
 		antFarm.putPheromone(this);
 	}
 
-    private void pickupFood(Food food) {
+    void pickupFood(Food food) {
     	food.pickUp();
     	carriesFood = true;
     }
 
-    private void enterHive() {
+    void enterHive() {
     	hive.pickUpAnt();
     	if(carriesFood) {
 	    	hive.putFood();
@@ -246,7 +197,7 @@ public class Ant implements SceneObject, Obstacle {
     	idle();
     }
     
-    private void leaveHive() {
+    void leaveHive() {
     	position = hive.getSpawnPosition();
 
     	visible = true;
@@ -256,24 +207,21 @@ public class Ant implements SceneObject, Obstacle {
     	PVector up = new PVector(0f, 1f);
     	rotation = PVector.angleBetween(distance, up);
     	
-    	wanderingTime = 0f;
-    	maxWanderingTime = antFarm.random(MIN_WANDERING_TIME, MAX_WANDERING_TIME);
     	wander();
     }
 
-    private void wander() {
-    	state = AntState.WANDERING;
+    void wander() {
+    	state = new WanderingState(this);
     	behavior = new WanderingBehavior();
     }
 
-    private void returnHome() {
-    	state = AntState.RETURNING_HOME;
+    void returnHome() {
+    	state = new ReturningHomeState(this);
     	behavior = new SeekBehavior(hive.getCenter(), this);
     }
 
-    private void idle() {
-    	idleTime = 0;
-    	state = AntState.IDLE;
+    void idle() {
+    	state = new IdleState(this);
     }
 
     public void die() {
@@ -320,6 +268,10 @@ public class Ant implements SceneObject, Obstacle {
     }
 	
 	public float getRelativeStamina() {
-		return wanderingTime / maxWanderingTime;
+		return timeToLive;
+	}
+
+	public boolean isCarryingFood() {
+		return carriesFood;
 	}
 }

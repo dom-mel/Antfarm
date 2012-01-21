@@ -2,6 +2,7 @@ package org.linesofcode.antfarm.sceneObjects;
 
 import controlP5.*;
 import org.linesofcode.antfarm.AntFarm;
+import org.linesofcode.antfarm.sceneObjects.ant.Ant;
 
 import java.util.HashSet;
 import java.util.Set;

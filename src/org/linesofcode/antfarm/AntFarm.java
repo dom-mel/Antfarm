@@ -2,12 +2,13 @@ package org.linesofcode.antfarm;
 
 import org.linesofcode.antfarm.exception.OutOfBoundsException;
 import org.linesofcode.antfarm.exception.PathIsBlockedException;
-import org.linesofcode.antfarm.sceneObjects.Ant;
 import org.linesofcode.antfarm.sceneObjects.BoundingBox;
 import org.linesofcode.antfarm.sceneObjects.Food;
 import org.linesofcode.antfarm.sceneObjects.Hive;
 import org.linesofcode.antfarm.sceneObjects.Overlay;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
+import org.linesofcode.antfarm.sceneObjects.ant.Ant;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
