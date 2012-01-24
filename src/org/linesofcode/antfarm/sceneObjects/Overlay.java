@@ -66,7 +66,7 @@ public class Overlay {
         viewDirectionButton.addListener(new ControlListener() {
             @Override
             public void controlEvent(ControlEvent controlEvent) {
-                AntFarm.drawViewDirection = viewDirectionButton.value() == 1;
+                AntFarm.DRAW_VIEW_DIRECTION = viewDirectionButton.value() == 1;
             }
         });
         controlls.add(viewDirectionButton);

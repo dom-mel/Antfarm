@@ -6,6 +6,7 @@ import org.linesofcode.antfarm.sceneObjects.BoundingBox;
 import org.linesofcode.antfarm.sceneObjects.Food;
 import org.linesofcode.antfarm.sceneObjects.Hive;
 import org.linesofcode.antfarm.sceneObjects.Overlay;
+import org.linesofcode.antfarm.sceneObjects.Ping;
 import org.linesofcode.antfarm.sceneObjects.SceneObject;
 import org.linesofcode.antfarm.sceneObjects.ant.Ant;
 
@@ -29,9 +30,12 @@ public class AntFarm extends PApplet {
     };
     public static final float MIN_STATIC_SPAWN_DISTANCE = 150;
     public static final float BORDER_SPANW_DISTANCE = 10;
+	private static boolean PINGS_ENABLED = true;
     public static int FOOD_COUNT = 2;
     public static float TIME_LAPSE = 1f;
     public static float PHEROMONE_SIZE = 5f;
+    public static boolean DRAW_VIEW_DIRECTION = false;
+	private static boolean DRAW_BG_TEXTURE = false;
 
     private final Set<SceneObject> staticSceneObjects = new HashSet<SceneObject>(1000);
     private final Set<Ant> ants = new HashSet<Ant>(1000);
@@ -43,8 +47,7 @@ public class AntFarm extends PApplet {
     private PGraphics pheromones;
     
     private PImage bgTexture;
-
-	public static boolean drawViewDirection = false;
+	
 	private int currentFoodCount = 0;
 
     @Override
@@ -79,7 +82,10 @@ public class AntFarm extends PApplet {
     public void draw() {
         update(1 / frameRate);
         background(155);
-        image(bgTexture, 0, 0, 600, 400);
+        
+        if(DRAW_BG_TEXTURE) {
+        	image(bgTexture, 0, 0, 600, 400);
+        }
 
         image(pheromones, 0, 0);
 
@@ -143,8 +149,10 @@ public class AntFarm extends PApplet {
     }
 
     private void spawnFood() {
-        addObjects.add(new Food(this));
+    	Food food = new Food(this);
+        addObjects.add(food);
         currentFoodCount++;
+        ping(food.getPosition().x, food.getPosition().y);
     }
 
     public void removeFood(final Food food) {
@@ -162,10 +170,11 @@ public class AntFarm extends PApplet {
             }
         }
         removeObjects.add(hive);
+        ping(hive.getCenter().x, hive.getCenter().y);
     }
 
 	public boolean isDrawViewDirectionEnabled() {
-		return drawViewDirection;
+		return DRAW_VIEW_DIRECTION;
 	}
 
     public boolean isPathBlocked(final Ant me, final PVector translation) {
@@ -217,15 +226,23 @@ public class AntFarm extends PApplet {
     }
 
     public void antFight(final Ant a, final Ant b) {
-        float combatValueA = a.getRelativeStamina() + random(1f);
+        
+    	float combatValueA = a.getRelativeStamina() + random(1f);
         float combatValueB = b.getRelativeStamina() + random(1f);
+        
         if(combatValueA > combatValueB) {
         	b.die();
-        } else if(combatValueB > combatValueA) {
-        	a.die();
-        } else {
-        	antFight(a, b);
+        	ping(b.getPosition().x, b.getPosition().y);
+        	return;
         }
+        
+		if(combatValueB > combatValueA) {
+        	a.die();
+        	ping(a.getPosition().x, a.getPosition().y);
+        	return;
+		}
+    	
+		antFight(a, b);
     }
 
     private void assertAntInBounds(PVector newPosition) throws OutOfBoundsException {
@@ -300,4 +317,13 @@ public class AntFarm extends PApplet {
         }
     }
 
+	public void removeSceneObject(SceneObject sceneObject) {
+		removeObjects.add(sceneObject);
+	}
+
+	public void ping(float x, float y) {
+		if(PINGS_ENABLED) {
+			addObjects.add(new Ping(this, x, y));
+		}
+	}
 }
