@@ -22,7 +22,10 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class AntFarm extends PApplet {
 
-    private static final int[] HIVE_COLORS = {
+    private static final int RES_Y = 600;
+	private static final int RES_X = 800;
+	
+	private static final int[] HIVE_COLORS = {
             new Color(60, 60, 235).getRGB(),
             new Color(255, 80, 0).getRGB(),
             new Color(255, 220, 0).getRGB(),
@@ -55,7 +58,7 @@ public class AntFarm extends PApplet {
     	
     	loadAssets();
     	
-        size(600, 400);
+        size(RES_X, RES_Y);
 
         for (final int HIVE_COLOR : HIVE_COLORS) {
             staticSceneObjects.add(new Hive(this, HIVE_COLOR));
